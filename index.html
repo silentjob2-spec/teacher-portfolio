@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملف إنجاز المعلم المطور - الإصدار 14</title>
+    <!-- SortableJS للسحب والإفلات -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --accent: #0f766e;
+            --accent2: #7c3aed;
+            --danger: #b91c1c;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --border: #cbd5e1;
+            --shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding-bottom: 80px;
+        }
+
+        /* ===== شريط التحكم ===== */
+        .top-navbar {
+            background: #fff;
+            border-bottom: 3px solid var(--primary);
+            padding: 10px 20px;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.05rem;
+        }
+
+        .navbar-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+        .btn {
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Cairo', sans-serif;
+        }
+        .btn-primary { background: var(--primary); }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--accent); }
+        .btn-success:hover { background: #115e59; }
+        .btn-outline { background: transparent; color: #475569; border: 1px solid #cbd5e1; }
+        .btn-outline:hover { background: #f1f5f9; }
+        .btn-purple { background: var(--accent2); }
+        .btn-purple:hover { background: #6d28d9; }
+        .btn-danger { background: var(--danger); }
+        .btn-danger:hover { background: #991b1b; }
+
+        /* ===== الحاوية الرئيسية ===== */
+        .main-container {
+            max-width: 1100px;
+            margin: 90px auto 30px;
+            padding: 0 20px;
+        }
+
+        /* ===== الغلاف ===== */
+        .header-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #334155 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header-banner::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .header-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -40px; left: -40px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+        .header-banner h1 { font-size: 2.2rem; margin-bottom: 10px; font-weight: 800; position: relative; }
+        .header-banner p { font-size: 1.1rem; opacity: 0.9; position: relative; }
+        .header-img-wrapper {
+            margin: 20px auto 0;
+            max-width: 200px;
+        }
+        .header-img-wrapper img {
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.6);
+            object-fit: cover;
+            transition: object-position 0.2s;
+        }
+        .header-img-wrapper img.fit-contain { object-fit: contain; background: rgba(255,255,255,0.1); }
+        .photo-fit-toggle {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.75);
+            cursor: pointer;
+            background: rgba(255,255,255,0.12);
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: none;
+            font-family: 'Cairo', sans-serif;
+            transition: background 0.2s;
+        }
+        .photo-fit-toggle:hover { background: rgba(255,255,255,0.22); }
+        .header-upload-label {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            transition: background 0.2s;
+        }
+        .header-upload-label:hover { background: rgba(255,255,255,0.25); }
+
+        /* ===== غلاف الطباعة ===== */
+        .print-cover-page {
+            display: none;
+            background: white;
+            width: 100%;
+            height: 100vh;
+            page-break-after: always;
+            page-break-inside: avoid;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+        .print-cover-page img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* ===== فاصل الأقسام ===== */
+        .section-separator {
+            background: linear-gradient(135deg, #e0e7ff, #e2e8f0);
+            color: var(--primary);
+            padding: 13px 16px;
+            margin: 35px 0 14px;
+            border-radius: 8px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            border-right: 6px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            cursor: grab;
+            user-select: none;
+            position: relative;
+        }
+        .section-separator:active { cursor: grabbing; }
+        .section-separator .drag-handle {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            margin-left: 8px;
+            cursor: grab;
+        }
+        .section-separator.sortable-ghost { opacity: 0.4; background: #ddd; }
+
+        .section-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+
+        /* ===== الكروت ===== */
+        .cards-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            position: relative;
+            cursor: default;
+        }
+        .card.sortable-ghost { opacity: 0.4; }
+        .card-drag-handle {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            font-size: 1.1rem;
+            color: #94a3b8;
+            cursor: grab;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            user-select: none;
+            z-index: 2;
+        }
+        .card-drag-handle:hover { background: #e2e8f0; color: #64748b; }
+        .card-drag-handle:active { cursor: grabbing; }
+
+        .card-title-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            gap: 8px;
+        }
+        .card-title { color: var(--primary); font-size: 1.1rem; font-weight: 800; flex: 1; }
+
+        .card-actions { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+
+        /* ===== الأزرار الصغيرة ===== */
+        .action-btn {
+            padding: 4px 9px;
+            font-size: 0.78rem;
+            border-radius: 5px;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+            background: white;
+            font-weight: 700;
+            color: #334155;
+            font-family: 'Cairo', sans-serif;
+            white-space: nowrap;
+            transition: all 0.15s;
+        }
+        .action-btn:hover { background: #f1f5f9; }
+        .action-btn.green { background: var(--accent); color: white; border-color: var(--accent); }
+        .action-btn.green:hover { background: #115e59; }
+        .action-btn.blue { background: var(--primary); color: white; border-color: var(--primary); }
+        .action-btn.blue:hover { background: var(--primary-hover); }
+        .action-btn.red { color: var(--danger); border-color: #fca5a5; }
+        .action-btn.red:hover { background: #fef2f2; }
+        .action-btn.eye { background: #f8fafc; }
+
+        /* ===== حالة الإخفاء ===== */
+        .hidden-state {
+            opacity: 0.3 !important;
+            background: #fafafa !important;
+            border: 1.5px dashed #ef4444 !important;
+        }
+        .hidden-state * { text-decoration: line-through #ef4444 !important; }
+        .hidden-state .action-btn,
+        .hidden-state .card-drag-handle,
+        .hidden-state input,
+        .hidden-state select { text-decoration: none !important; }
+
+        /* ===== قابل للتحرير ===== */
+        .editable {
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            display: inline-block;
+            transition: all 0.2s;
+            min-width: 20px;
+        }
+        .editable:hover { background: rgba(0,0,0,0.04); cursor: text; }
+        .editable:focus {
+            background: transparent !important;
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+        }
+        .header-banner .editable:hover { background: rgba(255,255,255,0.15); }
+        .header-banner .editable:focus { background: transparent !important; color: #fff !important; }
+
+        /* ===== شبكة المعلومات ===== */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .info-item {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        .info-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 4px; }
+        .info-label { font-size: 0.78rem; color: #64748b; font-weight: 700; }
+
+        /* ===== معرض الصور ===== */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; margin-top: 10px; }
+        .gallery-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        .gallery-img-wrapper { width: 100%; height: 170px; background: #f8fafc; display: flex; align-items: center; justify-content: center; padding: 8px; border-bottom: 1px solid #e2e8f0; overflow: hidden; }
+        .gallery-img-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .gallery-caption { padding: 8px; font-size: 0.85rem; font-weight: 700; text-align: center; }
+        .gallery-item-actions { display: flex; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+        .gallery-item-btn { flex: 1; padding: 6px; font-size: 0.78rem; background: transparent; border: none; cursor: pointer; font-weight: 700; color: #475569; font-family: 'Cairo', sans-serif; }
+        .gallery-item-btn:not(:last-child) { border-left: 1px solid #e2e8f0; }
+
+        /* ===== الجداول ===== */
+        .sub-header {
+            background: #f1f5f9;
+            padding: 8px 14px;
+            margin: 18px 0 8px;
+            border-right: 4px solid var(--accent);
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px;
+            gap: 8px;
+        }
+        .table-responsive { overflow-x: auto; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.92rem; }
+        th, td { padding: 10px 12px; border: 1px solid var(--border); position: relative; }
+        th { background: #f1f5f9; color: var(--primary); font-weight: 800; }
+        .total-row { background: #f0fdf4; font-weight: 800; color: var(--accent); border-top: 2px solid var(--accent); }
+
+        /* ===== قائمة الروابط ===== */
+        .links-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+        .link-item a {
+            color: #0369a1;
+            text-decoration: underline;
+            font-weight: 700;
+            flex: 1;
+            word-break: break-all;
+        }
+        .link-item a:hover { color: #075985; }
+        .link-icon { font-size: 1rem; color: #0369a1; flex-shrink: 0; }
+        .link-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+        /* ===== صور القسم ===== */
+        .section-images { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .section-img-item {
+            position: relative;
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .section-img-item img {
+            width: 120px; height: 90px;
+            object-fit: contain;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            display: block;
+        }
+        .section-img-item .img-remove {
+            position: absolute;
+            top: 2px; left: 2px;
+            background: rgba(185,28,28,0.85);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px; height: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .section-img-item .img-caption {
+            font-size: 0.72rem;
+            text-align: center;
+            padding: 2px 4px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* ===== توست ===== */
+        #toast {
+            visibility: hidden;
+            min-width: 260px;
+            background: #0f172a;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px 20px;
+            position: fixed;
+            z-index: 2000;
+            left: 50%;
+            bottom: 25px;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+        }
+        #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.7s; }
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 25px; opacity: 1; } }
+        @keyframes fadeout { from { bottom: 25px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+
+        /* ===== مودال ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        .modal-box h3 { color: var(--primary); margin-bottom: 16px; font-size: 1.1rem; font-weight: 800; }
+        .modal-input {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+        }
+        .modal-input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
+        .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+        /* ===== معاينة الغلاف ===== */
+        .cover-preview {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 20px;
+            padding: 3px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--primary);
+        }
+        .cover-preview img { width: 28px; height: 28px; object-fit: cover; border-radius: 6px; }
+
+        /* ===== تقدم ===== */
+        .progress-bar-wrapper { background: #e2e8f0; border-radius: 10px; height: 12px; overflow: hidden; margin: 6px 0; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), #10b981); border-radius: 10px; transition: width 0.4s; }
+
+        /* ===== قائمة التقييم ===== */
+        .eval-select {
+            appearance: none;
+            -webkit-appearance: none;
+            border: none;
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s;
+            min-width: 110px;
+        }
+        .eval-select:focus { box-shadow: 0 0 0 2px rgba(59,130,246,0.3); }
+        .eval-select[data-val="ممتاز"] { background: #dcfce7; color: #166534; }
+        .eval-select[data-val="جيد جداً"] { background: #dbeafe; color: #1e40af; }
+        .eval-select[data-val="جيد"] { background: #e0f2fe; color: #0369a1; }
+        .eval-select[data-val="مقبول"] { background: #fef9c3; color: #854d0e; }
+        .eval-select[data-val="بحاجة تطوير"] { background: #fee2e2; color: #991b1b; }
+
+        /* ===== شريط التقدم العام ===== */
+        .portfolio-progress-bar {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .portfolio-progress-bar span { font-size: 0.85rem; font-weight: 700; color: #475569; }
+        .portfolio-progress-bar .prog-fill { flex: 1; min-width: 120px; background: #e2e8f0; border-radius: 10px; height: 10px; overflow: hidden; }
+        .portfolio-progress-bar .prog-fill-inner { height: 100%; background: linear-gradient(90deg, var(--accent), #10b981); border-radius: 10px; transition: width 0.5s; }
+
+        /* ===== بادج التقييم الذاتي الطباعة ===== */
+        @media print {
+            .eval-select { -webkit-appearance: none; border: 1px solid #000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        }
+
+        /* ===== تحسين الجدول مع لون متناوب ===== */
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        tbody tr:hover { background: #f0f9ff; transition: background 0.15s; }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-yellow { background: #fef9c3; color: #854d0e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-purple { background: #ede9fe; color: #5b21b6; }
+
+        /* ===== بطاقة الشهادة ===== */
+        .cert-card {
+            background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+            border: 1.5px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .cert-icon { font-size: 2.2rem; flex-shrink: 0; }
+        .cert-info { flex: 1; }
+        .cert-title { font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+        .cert-meta { font-size: 0.82rem; color: #64748b; }
+
+        /* ===== طباعة ===== */
+        @media print {
+            @page {
+                margin: 1cm;
+                /* إزالة رأس وتذييل المتصفح تلقائياً */
+                margin-top: 1cm;
+                margin-bottom: 1cm;
+            }
+            @page :first { margin: 0; }
+
+            .top-navbar,
+            #completion-tracker,
+            footer,
+            .card-drag-handle,
+            .section-actions,
+            .card-actions,
+            .action-btn,
+            .move-btn,
+            .gallery-item-actions,
+            .gallery-item-btn,
+            .header-upload-label,
+            .link-actions,
+            .section-img-item .img-remove,
+            #toast,
+            .modal-overlay,
+            th:last-child,
+            td:last-child { display: none !important; }
+
+            .hidden-state { display: none !important; height: 0 !important; overflow: hidden !important; margin: 0 !important; padding: 0 !important; }
+            .section-block.print-empty { display: none !important; }
+            /* حقول فارغة للمشرف عند الطباعة */
+            .print-blank { color: transparent !important; -webkit-text-fill-color: transparent !important; }
+
+            .main-container { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+
+            .card {
+                border: 1px solid #000 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+                margin-bottom: 12px !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .cards-wrapper { gap: 10px !important; }
+
+            .section-separator {
+                background: #e2e8f0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                page-break-after: avoid !important;
+                margin-top: 16px !important;
+            }
+
+            .info-item, .cert-card {
+                background: #f8fafc !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            th {
+                background: #e2e8f0 !important;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .header-banner {
+                page-break-before: avoid !important;
+                page-break-after: always !important;
+                display: block !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                min-height: 60vh;
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .header-banner .action-btn { display: none !important; }
+
+            .print-cover-page {
+                display: block !important;
+                page-break-after: always !important;
+                width: 100vw !important;
+                height: 100vh !important;
+            }
+            .print-cover-page.no-cover-img { display: none !important; }
+
+            .badge {
+                border: 1px solid #000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            body { font-size: 12pt; background: white !important; }
+            a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- شريط التحكم -->
+<nav class="top-navbar">
+    <div class="navbar-brand">
+        <span class="editable" contenteditable="true">📘 ملف إنجاز المعلم المطور - الإصدار 14</span>
+    </div>
+    <div class="navbar-actions">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ تصدير PDF</button>
+        <button class="btn btn-success" onclick="savePortfolio()">💾 حفظ التعديلات</button>
+        <button class="btn btn-outline" onclick="addNewSection()">➕ إضافة قسم</button>
+        <button class="btn btn-purple" id="coverUploadBtn">📄 غلاف PDF</button>
+        <button class="btn btn-outline" id="coverClearBtn" style="display:none; color:#b91c1c; border-color:#fca5a5;" title="إزالة صورة الغلاف">✕ مسح الغلاف</button>
+        <span id="coverPreviewSpan" class="cover-preview" style="display:none;"></span>
+        <input type="file" id="coverImageInput" accept="image/*" style="display:none;">
+        <button class="btn btn-outline" onclick="resetPortfolio()" style="color:#b91c1c; border-color:#fca5a5;">🔄 استعادة</button>
+    </div>
+</nav>
+
+<!-- صفحة الغلاف للطباعة - صورة فقط بدون أي نص -->
+<div id="printCoverPage" class="print-cover-page no-cover-img">
+    <img id="coverImagePreviewPrint" src="" alt="غلاف الملف" style="display:none; width:100%; height:100%; object-fit:contain;">
+</div>
+
+<!-- الحاوية الرئيسية -->
+<div class="main-container">
+
+    <!-- الغلاف الشاشة -->
+    <header class="header-banner" id="main-header">
+        <div style="position:absolute; top:10px; left:10px;">
+            <button class="action-btn eye" onclick="toggleVisibility('main-header')">👁️ إخفاء الغلاف</button>
+        </div>
+        <div class="header-img-wrapper" id="header-img-wrapper">
+            <img id="header-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Ccircle cx='75' cy='75' r='75' fill='rgba(255,255,255,0.15)'/%3E%3Ccircle cx='75' cy='60' r='30' fill='rgba(255,255,255,0.4)'/%3E%3Cellipse cx='75' cy='120' rx='45' ry='35' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E" alt="صورة المعلم" style="display:block;">
+            <label class="header-upload-label" for="headerPhotoInput">📷 تغيير الصورة الشخصية</label>
+            <input type="file" id="headerPhotoInput" accept="image/*" style="display:none;" onchange="uploadHeaderPhoto(event)">
+            <button class="photo-fit-toggle" id="fitToggleBtn" onclick="togglePhotoFit()" title="تبديل طريقة عرض الصورة">🔲 ملء / احتواء</button>
+        </div>
+        <h1 class="editable" contenteditable="true" style="width:100%; margin-top: 16px;">📘 ملف إنجاز المعلم المطور</h1>
+        <p class="editable" contenteditable="true" style="width:100%; margin-top:6px;">المملكة الأردنية الهاشمية - وزارة التربية والتعليم</p>
+        <p class="editable" contenteditable="true" style="width:100%; font-size:0.95rem; opacity:0.8; margin-top:4px;">العام الدراسي 2025 / 2026</p>
+    </header>
+
+    <!-- شريط اكتمال الملف -->
+    <div class="portfolio-progress-bar" id="completion-tracker">
+        <span>📊</span>
+        <span id="completion-label">اكتمال الملف: —</span>
+        <div class="prog-fill">
+            <div class="prog-fill-inner" id="completion-bar-inner" style="width:0%"></div>
+        </div>
+        <span style="font-size:0.78rem; color:#94a3b8;">يتحدث تلقائياً عند التعديل</span>
+    </div>
+
+    <!-- حاوية الأقسام القابلة للسحب -->
+    <div id="sections-container">
+
+        <!-- ===== القسم الأول ===== -->
+        <div class="section-block" id="sec-1">
+            <div class="section-separator" id="sep-1">
+                <span class="drag-handle" title="اسحب لإعادة الترتيب">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">📑 أولاً: البيانات التعريفية والأنصبة الدراسية</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-1')">➕ كرت جديد</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-1-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-1-body">
+                <div class="cards-wrapper" id="wrapper-1">
+
+                    <!-- كرت البطاقة الشخصية -->
+                    <div class="card" id="card-bio">
+                        <div class="card-drag-handle" title="اسحب لإعادة الترتيب">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">1. بطاقة الهوية الرسمية والمرجعية الوظيفية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addInfoField('grid-bio')">➕ حقل</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-bio')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-bio')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-bio')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-bio')">❌</button>
+                            </div>
+                        </div>
+                        <div class="info-grid" id="grid-bio">
+                            <div class="info-item" id="bio-1">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">اسم المعلم رباعياً</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700;">إياد خضر  </div>
+                            </div>
+                            <div class="info-item" id="bio-2">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">التخصص والمؤهل العلمي</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700;">تكنولوجيا المعلومات (IT)</div>
+                            </div>
+                            <div class="info-item" id="bio-3">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">المدرسة والمديرية</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700;">مدرسة / مديرية التربية</div>
+                            </div>
+                            <div class="info-item" id="bio-4">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">سنوات الخبرة التدريسية</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700;">15 سنة</div>
+                            </div>
+                            <div class="info-item" id="bio-5">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">الدرجة الوظيفية</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700;">معلم أول / مطور</div>
+                            </div>
+                            <div class="info-item" id="bio-6">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">البريد الإلكتروني الرسمي</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700; direction:ltr; text-align:right;">teacher@edu.jo</div>
+                            </div>
+                        </div>
+                        <div class="section-images" id="imgs-bio"></div>
+                        <div class="links-list" id="links-bio"></div>
+                    </div>
+
+                    <!-- كرت جدول الأنصبة -->
+                    <div class="card" id="card-lessons">
+                        <div class="card-drag-handle" title="اسحب لإعادة الترتيب">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">2. جدول المواد والأنصبة الدراسية التفاعلي</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addTermTable()">➕ فصل دراسي</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-lessons')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-lessons')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-lessons')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-lessons')">❌</button>
+                            </div>
+                        </div>
+                        <div id="terms-container">
+                            <div id="term-init">
+                                <div class="sub-header">
+                                    <span class="editable" contenteditable="true">الفصل الدراسي الأول</span>
+                                    <button class="action-btn" onclick="addLessonRow('table-term-init')">➕ مادة</button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table id="table-term-init" class="term-table">
+                                        <thead>
+                                            <tr>
+                                                <th>المادة الدراسية</th>
+                                                <th>الصف والشعبة</th>
+                                                <th>الحصص الأسبوعية</th>
+                                                <th>نوع المساق</th>
+                                                <th>إجراء</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="row-init-1">
+                                                <td><span class="editable" contenteditable="true">تكنولوجيا المعلومات BTEC</span></td>
+                                                <td><span class="editable" contenteditable="true">الثاني عشر (IT)</span></td>
+                                                <td><input type="number" class="lessons-input" value="6" oninput="calcTotals()" style="width:55px; padding:3px; font-weight:700; text-align:center;"></td>
+                                                <td><span class="editable" contenteditable="true">مهني / تطبيقي</span></td>
+                                                <td>
+                                                    <button class="action-btn eye" onclick="toggleVisibility('row-init-1')">👁️</button>
+                                                    <button class="action-btn red" onclick="this.closest('tr').remove(); calcTotals();">❌</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="total-row">
+                                                <td colspan="2">مجموع أنصبة هذا الفصل:</td>
+                                                <td class="term-total" style="text-align:center; font-size:1.1rem;">6</td>
+                                                <td colspan="2">حصة أسبوعية</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-images" id="imgs-lessons"></div>
+                        <div class="links-list" id="links-lessons"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم الثاني ===== -->
+        <div class="section-block" id="sec-2">
+            <div class="section-separator" id="sep-2">
+                <span class="drag-handle" title="اسحب">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">📸 ثانياً: توثيق الأنشطة والمعارض المصورة</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-2')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-2-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-2-body">
+                <div class="cards-wrapper" id="wrapper-2">
+
+                    <div class="card" id="card-gallery">
+                        <div class="card-drag-handle" title="اسحب">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">ألبوم الصور التوثيقية والشواهد الميدانية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="document.getElementById('gallery-upload-input').click()">🖼️ رفع صور</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-gallery')">🔗 رابط</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-gallery')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-gallery')">❌</button>
+                            </div>
+                        </div>
+                        <input type="file" id="gallery-upload-input" style="display:none;" accept="image/*" multiple onchange="uploadGalleryImages(event)">
+                        <div class="gallery-grid" id="main-gallery-grid">
+                            <div class="gallery-item" id="gallery-placeholder">
+                                <div class="gallery-img-wrapper">
+                                    <div style="color:#94a3b8; font-weight:700; font-size:0.85rem; text-align:center; padding:10px;">🖼️ اضغط "رفع صور" لإضافة صور الأنشطة والشواهد</div>
+                                </div>
+                                <div class="gallery-caption editable" contenteditable="true">نموذج لشواهد الأنشطة البرمجية والميدانية</div>
+                                <div class="gallery-item-actions">
+                                    <button class="gallery-item-btn" onclick="toggleVisibility('gallery-placeholder')">👁️ حجب</button>
+                                    <button class="gallery-item-btn" style="color:#b91c1c;" onclick="this.closest('.gallery-item').remove()">❌ حذف</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="links-list" id="links-gallery"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم الثالث ===== -->
+        <div class="section-block" id="sec-3">
+            <div class="section-separator" id="sep-3">
+                <span class="drag-handle">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">🎓 ثالثاً: التطوير المهني والتدريب والتأهيل</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-3')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-3-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-3-body">
+                <div class="cards-wrapper" id="wrapper-3">
+
+                    <div class="card" id="card-training">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">الدورات التدريبية المعتمدة والبرامج التطويرية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addTrainingRow('table-training')">➕ دورة</button>
+                                <button class="action-btn" onclick="toggleTrainingColumn()">🔲 أعمدة</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-training')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-training')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-training')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-training')">❌</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table-training">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>اسم الدورة / البرنامج</th>
+                                        <th>الجهة المانحة</th>
+                                        <th>التاريخ</th>
+                                        <th>المدة (ساعة)</th>
+                                        <th>التقييم</th>
+                                        <th>إجراء</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><span class="editable" contenteditable="true">برنامج المعلم المطور الذكي</span></td>
+                                        <td><span class="editable" contenteditable="true">وزارة التربية والتعليم</span></td>
+                                        <td><span class="editable" contenteditable="true">2024/09/15</span></td>
+                                        <td><span class="editable" contenteditable="true">40</span></td>
+                                        <td><select class="eval-select" onchange="updateEvalBadge(this)"><option value="ممتاز" selected>ممتاز</option><option value="جيد جداً">جيد جداً</option><option value="جيد">جيد</option><option value="مقبول">مقبول</option><option value="بحاجة تطوير">بحاجة تطوير</option></select></td>
+                                        <td>
+                                            <button class="action-btn red" onclick="this.closest('tr').remove()">❌</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td><span class="editable" contenteditable="true">تكامل الذكاء الاصطناعي في التعليم</span></td>
+                                        <td><span class="editable" contenteditable="true">مركز PSUT</span></td>
+                                        <td><span class="editable" contenteditable="true">2024/11/20</span></td>
+                                        <td><span class="editable" contenteditable="true">24</span></td>
+                                        <td><select class="eval-select" onchange="updateEvalBadge(this)"><option value="ممتاز">ممتاز</option><option value="جيد جداً" selected>جيد جداً</option><option value="جيد">جيد</option><option value="مقبول">مقبول</option><option value="بحاجة تطوير">بحاجة تطوير</option></select></td>
+                                        <td>
+                                            <button class="action-btn red" onclick="this.closest('tr').remove()">❌</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td><span class="editable" contenteditable="true">منهجيات التفكير النقدي والإبداعي</span></td>
+                                        <td><span class="editable" contenteditable="true">منظمة اليونسكو</span></td>
+                                        <td><span class="editable" contenteditable="true">2025/01/10</span></td>
+                                        <td><span class="editable" contenteditable="true">30</span></td>
+                                        <td><select class="eval-select" onchange="updateEvalBadge(this)"><option value="ممتاز" selected>ممتاز</option><option value="جيد جداً">جيد جداً</option><option value="جيد">جيد</option><option value="مقبول">مقبول</option><option value="بحاجة تطوير">بحاجة تطوير</option></select></td>
+                                        <td>
+                                            <button class="action-btn red" onclick="this.closest('tr').remove()">❌</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="section-images" id="imgs-training"></div>
+                        <div class="links-list" id="links-training"></div>
+                    </div>
+
+                    <div class="card" id="card-skills">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">المهارات التقنية والمعرفية التطويرية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addSkillRow('skills-grid')">➕ مهارة</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-skills')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-skills')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-skills')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-skills')">❌</button>
+                            </div>
+                        </div>
+                        <div class="info-grid" id="skills-grid">
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">برمجة Python</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="progress-bar-wrapper"><div class="progress-bar" style="width:90%"></div></div>
+                                <div style="font-size:0.78rem; color:#64748b; font-weight:700;">متقدم — 90%</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">تطوير الويب (HTML/CSS/JS)</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="progress-bar-wrapper"><div class="progress-bar" style="width:85%"></div></div>
+                                <div style="font-size:0.78rem; color:#64748b; font-weight:700;">متقدم — 85%</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">قواعد البيانات SQL</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="progress-bar-wrapper"><div class="progress-bar" style="width:80%"></div></div>
+                                <div style="font-size:0.78rem; color:#64748b; font-weight:700;">متقدم — 80%</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">أدوات الذكاء الاصطناعي</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="progress-bar-wrapper"><div class="progress-bar" style="width:75%"></div></div>
+                                <div style="font-size:0.78rem; color:#64748b; font-weight:700;">جيد جداً — 75%</div>
+                            </div>
+                        </div>
+                        <div class="section-images" id="imgs-skills"></div>
+                        <div class="links-list" id="links-skills"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم الرابع ===== -->
+        <div class="section-block" id="sec-4">
+            <div class="section-separator" id="sep-4">
+                <span class="drag-handle">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">🏆 رابعاً: الإنجازات والشهادات والجوائز</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-4')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-4-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-4-body">
+                <div class="cards-wrapper" id="wrapper-4">
+
+                    <div class="card" id="card-achievements">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">الجوائز والتكريمات والاعترافات الرسمية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addAchievementItem('achievements-list')">➕ إنجاز</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-achieve')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-achieve')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-achievements')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-achievements')">❌</button>
+                            </div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:12px;" id="achievements-list">
+                            <div class="cert-card" id="ach-1">
+                                <div class="cert-icon editable" contenteditable="true">🥇</div>
+                                <div class="cert-info">
+                                    <div class="cert-title editable" contenteditable="true">جائزة المعلم المتميز الوطنية</div>
+                                    <div class="cert-meta editable" contenteditable="true">وزارة التربية والتعليم — 2024 | المرتبة الأولى على مستوى المملكة</div>
+                                    <div class="cert-img-area" id="cert-img-1" style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;"></div>
+                                    <button class="action-btn" style="margin-top:6px; font-size:0.72rem;" onclick="addCertImage('cert-img-1')">🖼️ إرفاق صورة/شهادة</button>
+                                </div>
+                                <button class="action-btn red" style="flex-shrink:0;" onclick="this.closest('.cert-card').remove()">❌</button>
+                            </div>
+                            <div class="cert-card" id="ach-2">
+                                <div class="cert-icon editable" contenteditable="true">🏅</div>
+                                <div class="cert-info">
+                                    <div class="cert-title editable" contenteditable="true">درع التميز في دمج التقنية بالتعليم</div>
+                                    <div class="cert-meta editable" contenteditable="true">مركز التطوير المهني — 2023 | تقدير خاص من المديرية</div>
+                                    <div class="cert-img-area" id="cert-img-2" style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;"></div>
+                                    <button class="action-btn" style="margin-top:6px; font-size:0.72rem;" onclick="addCertImage('cert-img-2')">🖼️ إرفاق صورة/شهادة</button>
+                                </div>
+                                <button class="action-btn red" style="flex-shrink:0;" onclick="this.closest('.cert-card').remove()">❌</button>
+                            </div>
+                            <div class="cert-card" id="ach-3">
+                                <div class="cert-icon editable" contenteditable="true">📜</div>
+                                <div class="cert-info">
+                                    <div class="cert-title editable" contenteditable="true">شهادة التأهيل المهني المتقدم - BTEC</div>
+                                    <div class="cert-meta editable" contenteditable="true">Pearson Edexcel — 2022 | معتمد دولياً</div>
+                                    <div class="cert-img-area" id="cert-img-3" style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;"></div>
+                                    <button class="action-btn" style="margin-top:6px; font-size:0.72rem;" onclick="addCertImage('cert-img-3')">🖼️ إرفاق صورة/شهادة</button>
+                                </div>
+                                <button class="action-btn red" style="flex-shrink:0;" onclick="this.closest('.cert-card').remove()">❌</button>
+                            </div>
+                        </div>
+                        <div class="section-images" id="imgs-achieve"></div>
+                        <div class="links-list" id="links-achieve"></div>
+                    </div>
+
+                    <div class="card" id="card-certs">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">الشهادات الأكاديمية والاعتمادات الدولية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addCertRow('table-certs')">➕ شهادة</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-certs')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-certs')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-certs')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-certs')">❌</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table-certs">
+                                <thead>
+                                    <tr>
+                                        <th>اسم الشهادة</th>
+                                        <th>الجهة المانحة</th>
+                                        <th>تاريخ الحصول</th>
+                                        <th>صلاحية الاعتماد</th>
+                                        <th>الحالة</th>
+                                        <th>رابط التحقق</th>
+                                        <th>إجراء</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">CompTIA A+</span></td>
+                                        <td><span class="editable" contenteditable="true">CompTIA</span></td>
+                                        <td><span class="editable" contenteditable="true">2022/05/10</span></td>
+                                        <td><span class="editable" contenteditable="true">3 سنوات</span></td>
+                                        <td><span class="badge badge-green">فعّالة</span></td>
+                                        <td><a href="#" class="editable" contenteditable="true" style="color:#0369a1;">رابط التحقق</a></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">Google Certified Educator Level 2</span></td>
+                                        <td><span class="editable" contenteditable="true">Google</span></td>
+                                        <td><span class="editable" contenteditable="true">2023/08/22</span></td>
+                                        <td><span class="editable" contenteditable="true">3 سنوات</span></td>
+                                        <td><span class="badge badge-green">فعّالة</span></td>
+                                        <td><a href="#" class="editable" contenteditable="true" style="color:#0369a1;">رابط التحقق</a></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="section-images" id="imgs-certs"></div>
+                        <div class="links-list" id="links-certs"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم الخامس ===== -->
+        <div class="section-block" id="sec-5">
+            <div class="section-separator" id="sep-5">
+                <span class="drag-handle">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">📊 خامساً: أداء الطلاب والنتائج الأكاديمية</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-5')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-5-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-5-body">
+                <div class="cards-wrapper" id="wrapper-5">
+
+                    <div class="card" id="card-results">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">إحصاءات نتائج الطلاب الأكاديمية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addInfoField('results-grid')">➕ حقل</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-results')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-results')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-results')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-results')">❌</button>
+                            </div>
+                        </div>
+                        <div class="info-grid" id="results-grid">
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">نسبة النجاح العامة</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="editable" contenteditable="true" style="font-size:2rem; font-weight:800; color:#0f766e;">97.5%</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">المعدل العام للمادة</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="editable" contenteditable="true" style="font-size:2rem; font-weight:800; color:#1e3a8a;">87.3</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">عدد الطلاب المتفوقين (90+)</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="editable" contenteditable="true" style="font-size:2rem; font-weight:800; color:#7c3aed;">14 طالباً</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">الطلاب محتاجو دعم إضافي</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="editable" contenteditable="true" style="font-size:2rem; font-weight:800; color:#b91c1c;">2 طلاب</div>
+                            </div>
+                        </div>
+                        <div class="section-images" id="imgs-results"></div>
+                        <div class="links-list" id="links-results"></div>
+                    </div>
+
+                    <div class="card" id="card-results-table">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">جدول توزيع الدرجات حسب الشعب</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addResultRow('table-results')">➕ شعبة</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-results-table')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-results-table')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-results-table')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-results-table')">❌</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table-results">
+                                <thead>
+                                    <tr>
+                                        <th>المادة / الشعبة</th>
+                                        <th>عدد الطلاب</th>
+                                        <th>المعدل</th>
+                                        <th>نسبة النجاح</th>
+                                        <th>أعلى علامة</th>
+                                        <th>أدنى علامة</th>
+                                        <th>إجراء</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">IT - الثاني عشر A</span></td>
+                                        <td><span class="editable" contenteditable="true">28</span></td>
+                                        <td><span class="editable" contenteditable="true">88.5</span></td>
+                                        <td><span class="editable" contenteditable="true">100%</span></td>
+                                        <td><span class="editable" contenteditable="true">98</span></td>
+                                        <td><span class="editable" contenteditable="true">71</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">IT - الثاني عشر B</span></td>
+                                        <td><span class="editable" contenteditable="true">26</span></td>
+                                        <td><span class="editable" contenteditable="true">85.2</span></td>
+                                        <td><span class="editable" contenteditable="true">96%</span></td>
+                                        <td><span class="editable" contenteditable="true">96</span></td>
+                                        <td><span class="editable" contenteditable="true">55</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="section-images" id="imgs-results-table"></div>
+                        <div class="links-list" id="links-results-table"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم السادس ===== -->
+        <div class="section-block" id="sec-6">
+            <div class="section-separator" id="sep-6">
+                <span class="drag-handle">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">📋 سادساً: الخطط الدراسية ووثائق المنهج</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-6')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-6-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-6-body">
+                <div class="cards-wrapper" id="wrapper-6">
+
+                    <div class="card" id="card-plans">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">الخطة الدراسية السنوية والفصلية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addPlanRow('table-plans')">➕ وحدة</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-plans')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-plans')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-plans')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-plans')">❌</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table-plans">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الوحدة / الوحدة الدراسية</th>
+                                        <th>المحاور الرئيسية</th>
+                                        <th>الأسابيع المخصصة</th>
+                                        <th>استراتيجية التقييم</th>
+                                        <th>الموارد الرقمية</th>
+                                        <th>إجراء</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td><span class="editable" contenteditable="true">مقدمة في تطوير البرمجيات</span></td>
+                                        <td><span class="editable" contenteditable="true">البرمجة الكائنية، الخوارزميات</span></td>
+                                        <td><span class="editable" contenteditable="true">4 أسابيع</span></td>
+                                        <td><span class="editable" contenteditable="true">مشاريع + اختبار</span></td>
+                                        <td><a href="#" class="editable" contenteditable="true" style="color:#0369a1;">رابط المورد</a></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td><span class="editable" contenteditable="true">قواعد البيانات والمعلومات</span></td>
+                                        <td><span class="editable" contenteditable="true">SQL، ERD، تصميم DB</span></td>
+                                        <td><span class="editable" contenteditable="true">5 أسابيع</span></td>
+                                        <td><span class="editable" contenteditable="true">ورقة عمل + مشروع</span></td>
+                                        <td><a href="#" class="editable" contenteditable="true" style="color:#0369a1;">رابط المورد</a></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td><span class="editable" contenteditable="true">تطوير تطبيقات الويب</span></td>
+                                        <td><span class="editable" contenteditable="true">HTML, CSS, JavaScript</span></td>
+                                        <td><span class="editable" contenteditable="true">6 أسابيع</span></td>
+                                        <td><span class="editable" contenteditable="true">تطبيق عملي + معرض</span></td>
+                                        <td><a href="#" class="editable" contenteditable="true" style="color:#0369a1;">رابط المورد</a></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="section-images" id="imgs-plans"></div>
+                        <div class="links-list" id="links-plans"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم السابع ===== -->
+        <div class="section-block" id="sec-7">
+            <div class="section-separator" id="sep-7">
+                <span class="drag-handle">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">💡 سابعاً: الإبداع والابتكار ومشاريع الطلاب</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-7')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-7-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-7-body">
+                <div class="cards-wrapper" id="wrapper-7">
+
+                    <div class="card" id="card-projects">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">مشاريع الطلاب الإبداعية والتقنية المتميزة</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addProjectItem('projects-list')">➕ مشروع</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-projects')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-projects')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-projects')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-projects')">❌</button>
+                            </div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:10px;" id="projects-list">
+                            <div class="cert-card" style="background:linear-gradient(135deg,#f0fdf4,#ecfdf5);">
+                                <div class="cert-icon">🤖</div>
+                                <div class="cert-info">
+                                    <div class="cert-title editable" contenteditable="true">نظام كشف الحضور بالذكاء الاصطناعي</div>
+                                    <div class="cert-meta editable" contenteditable="true">طالب: محمد أحمد | الثاني عشر A | حاز على المرتبة الأولى في معرض المشاريع 2024</div>
+                                </div>
+                                <span class="badge badge-green" style="flex-shrink:0;">متميز</span>
+                                <button class="action-btn red" style="flex-shrink:0;" onclick="this.closest('.cert-card').remove()">❌</button>
+                            </div>
+                            <div class="cert-card" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+                                <div class="cert-icon">🌐</div>
+                                <div class="cert-info">
+                                    <div class="cert-title editable" contenteditable="true">منصة تعليمية تفاعلية لمادة IT</div>
+                                    <div class="cert-meta editable" contenteditable="true">فريق: 3 طلاب | تطبيق ويب كامل بقاعدة بيانات</div>
+                                </div>
+                                <span class="badge badge-blue" style="flex-shrink:0;">جيد جداً</span>
+                                <button class="action-btn red" style="flex-shrink:0;" onclick="this.closest('.cert-card').remove()">❌</button>
+                            </div>
+                            <div class="cert-card" style="background:linear-gradient(135deg,#fdf4ff,#ede9fe);">
+                                <div class="cert-icon">📱</div>
+                                <div class="cert-info">
+                                    <div class="cert-title editable" contenteditable="true">تطبيق جوال لإدارة مهام المدرسة</div>
+                                    <div class="cert-meta editable" contenteditable="true">طالبة: سارة خالد | Flutter + Firebase | شارك في مسابقة أردنية</div>
+                                </div>
+                                <span class="badge badge-purple" style="flex-shrink:0;">مبتكر</span>
+                                <button class="action-btn red" style="flex-shrink:0;" onclick="this.closest('.cert-card').remove()">❌</button>
+                            </div>
+                        </div>
+                        <div class="section-images" id="imgs-projects"></div>
+                        <div class="links-list" id="links-projects"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم الثامن ===== -->
+        <div class="section-block" id="sec-8">
+            <div class="section-separator" id="sep-8">
+                <span class="drag-handle">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">🤝 ثامناً: الشراكات والمجتمع المدرسي والمشاركة المجتمعية</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-8')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-8-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-8-body">
+                <div class="cards-wrapper" id="wrapper-8">
+
+                    <div class="card" id="card-partnerships">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">الشراكات المؤسسية والتعاون الأكاديمي</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addPartnerRow('table-partners')">➕ شراكة</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-partners')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-partners')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-partnerships')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-partnerships')">❌</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table-partners">
+                                <thead>
+                                    <tr>
+                                        <th>الجهة الشريكة</th>
+                                        <th>نوع التعاون</th>
+                                        <th>تاريخ الشراكة</th>
+                                        <th>المخرجات والنتائج</th>
+                                        <th>الحالة</th>
+                                        <th>إجراء</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">جامعة الأردن - كلية تكنولوجيا المعلومات</span></td>
+                                        <td><span class="editable" contenteditable="true">زيارات ميدانية وورش تقنية</span></td>
+                                        <td><span class="editable" contenteditable="true">2023/2024</span></td>
+                                        <td><span class="editable" contenteditable="true">3 زيارات، 60 طالب مستفيد</span></td>
+                                        <td><span class="badge badge-green">نشطة</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">شركة Orange Jordan</span></td>
+                                        <td><span class="editable" contenteditable="true">برامج التدريب المهني للطلاب</span></td>
+                                        <td><span class="editable" contenteditable="true">2024/2025</span></td>
+                                        <td><span class="editable" contenteditable="true">10 طلاب في تدريب صيفي</span></td>
+                                        <td><span class="badge badge-blue">قيد التنفيذ</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="section-images" id="imgs-partners"></div>
+                        <div class="links-list" id="links-partners"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم التاسع ===== -->
+        <div class="section-block" id="sec-9">
+            <div class="section-separator" id="sep-9">
+                <span class="drag-handle">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">✍️ تاسعاً: التقييم الذاتي وخطة التطوير المستقبلية</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-9')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-9-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-9-body">
+                <div class="cards-wrapper" id="wrapper-9">
+
+                    <div class="card" id="card-self-eval">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">التقييم الذاتي للمعلم وفق معايير الجودة</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addEvalRow('table-eval')">➕ معيار</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-eval')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-eval')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-self-eval')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-self-eval')">❌</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table-eval">
+                                <thead>
+                                    <tr>
+                                        <th>معيار التقييم</th>
+                                        <th>الوصف والمؤشرات</th>
+                                        <th>التقييم الذاتي</th>
+                                        <th>الأدلة والشواهد</th>
+                                        <th>إجراء</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">التخطيط للتدريس</span></td>
+                                        <td><span class="editable" contenteditable="true">جودة الخطط اليومية والفصلية والسنوية</span></td>
+                                        <td><select class="eval-select" onchange="updateEvalBadge(this)"><option value="ممتاز" selected>ممتاز</option><option value="جيد جداً">جيد جداً</option><option value="جيد">جيد</option><option value="مقبول">مقبول</option><option value="بحاجة تطوير">بحاجة تطوير</option></select></td>
+                                        <td><span class="editable" contenteditable="true">خطط موثقة ومعتمدة من الإشراف</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">توظيف التكنولوجيا</span></td>
+                                        <td><span class="editable" contenteditable="true">استخدام الأدوات الرقمية في التدريس</span></td>
+                                        <td><select class="eval-select" onchange="updateEvalBadge(this)"><option value="ممتاز" selected>ممتاز</option><option value="جيد جداً">جيد جداً</option><option value="جيد">جيد</option><option value="مقبول">مقبول</option><option value="بحاجة تطوير">بحاجة تطوير</option></select></td>
+                                        <td><span class="editable" contenteditable="true">منصات تعليمية، محتوى رقمي متنوع</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">التواصل مع أولياء الأمور</span></td>
+                                        <td><span class="editable" contenteditable="true">انتظام وجودة التواصل الأسري</span></td>
+                                        <td><select class="eval-select" onchange="updateEvalBadge(this)"><option value="ممتاز">ممتاز</option><option value="جيد جداً" selected>جيد جداً</option><option value="جيد">جيد</option><option value="مقبول">مقبول</option><option value="بحاجة تطوير">بحاجة تطوير</option></select></td>
+                                        <td><span class="editable" contenteditable="true">اجتماعات دورية، تقارير شهرية</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">قيادة الذات والمهنية</span></td>
+                                        <td><span class="editable" contenteditable="true">الالتزام والحضور والتطوير المستمر</span></td>
+                                        <td><select class="eval-select" onchange="updateEvalBadge(this)"><option value="ممتاز" selected>ممتاز</option><option value="جيد جداً">جيد جداً</option><option value="جيد">جيد</option><option value="مقبول">مقبول</option><option value="بحاجة تطوير">بحاجة تطوير</option></select></td>
+                                        <td><span class="editable" contenteditable="true">سجلات حضور، شهادات تدريب</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="section-images" id="imgs-eval"></div>
+                        <div class="links-list" id="links-eval"></div>
+                    </div>
+
+                    <div class="card" id="card-future">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">خطة التطوير المهني المستقبلية</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addGoalRow('table-goals')">➕ هدف</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-future')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-future')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-future')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-future')">❌</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="table-goals">
+                                <thead>
+                                    <tr>
+                                        <th>الهدف التطويري</th>
+                                        <th>الإجراءات المقترحة</th>
+                                        <th>الجدول الزمني</th>
+                                        <th>مؤشرات النجاح</th>
+                                        <th>الأولوية</th>
+                                        <th>إجراء</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">الحصول على شهادة AWS Cloud Practitioner</span></td>
+                                        <td><span class="editable" contenteditable="true">دراسة ذاتية + دورة معتمدة</span></td>
+                                        <td><span class="editable" contenteditable="true">2025/2026</span></td>
+                                        <td><span class="editable" contenteditable="true">اجتياز الاختبار بتقدير ممتاز</span></td>
+                                        <td><span class="badge badge-red">عالية</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="editable" contenteditable="true">تأليف كتاب تعليمي في البرمجة</span></td>
+                                        <td><span class="editable" contenteditable="true">كتابة + مراجعة + نشر</span></td>
+                                        <td><span class="editable" contenteditable="true">2026</span></td>
+                                        <td><span class="editable" contenteditable="true">نشر الكتاب ورقياً ورقمياً</span></td>
+                                        <td><span class="badge badge-yellow">متوسطة</span></td>
+                                        <td><button class="action-btn red" onclick="this.closest('tr').remove()">❌</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section-images" id="imgs-future"></div>
+                        <div class="links-list" id="links-future"></div>
+
+                        <div style="margin-top:18px;">
+                            <div class="sub-header" style="margin-top:0;">
+                                <span>التوقيع والإقرار الختامي</span>
+                            </div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:12px;">
+                                <div class="info-item">
+                                    <div class="info-label">توقيع المعلم / ة</div>
+                                    <div class="editable" contenteditable="true" style="margin-top:8px; min-height:40px; border-bottom:1px solid #cbd5e1;">التوقيع هنا</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">توقيع مدير المدرسة</div>
+                                    <div class="editable" contenteditable="true" style="margin-top:8px; min-height:40px; border-bottom:1px solid #cbd5e1;">التوقيع هنا</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">توقيع المشرف التربوي</div>
+                                    <div class="editable" contenteditable="true" style="margin-top:8px; min-height:40px; border-bottom:1px solid #cbd5e1;">التوقيع هنا</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">التاريخ الرسمي</div>
+                                    <div class="editable" contenteditable="true" style="margin-top:8px; font-weight:700; font-size:1.1rem;">_____ / _____ / 2026</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== القسم العاشر (جديد) ===== -->
+        <div class="section-block" id="sec-10">
+            <div class="section-separator" id="sep-10">
+                <span class="drag-handle">⠿</span>
+                <span class="editable" contenteditable="true" style="flex:1;">🏅 عاشراً: ملاحظات المشرف التربوي والتغذية الراجعة</span>
+                <div class="section-actions">
+                    <button class="action-btn blue" onclick="addCardToSection('wrapper-10')">➕ كرت</button>
+                    <button class="action-btn eye" onclick="toggleVisibility('sec-10-body')">👁️ إخفاء</button>
+                </div>
+            </div>
+            <div id="sec-10-body">
+                <div class="cards-wrapper" id="wrapper-10">
+
+                    <div class="card" id="card-supervisor">
+                        <div class="card-drag-handle">⠿</div>
+                        <div class="card-title-area">
+                            <div class="card-title editable" contenteditable="true">تقرير الزيارة الإشرافية وملاحظات المشرف</div>
+                            <div class="card-actions">
+                                <button class="action-btn green" onclick="addInfoField('grid-supervisor')">➕ حقل</button>
+                                <button class="action-btn" onclick="addLinkToCard('links-supervisor')">🔗 رابط</button>
+                                <button class="action-btn" onclick="addImageToCard('imgs-supervisor')">🖼️ صورة</button>
+                                <button class="action-btn eye" onclick="toggleVisibility('card-supervisor')">👁️</button>
+                                <button class="action-btn red" onclick="removeCard('card-supervisor')">❌</button>
+                            </div>
+                        </div>
+                        <div class="info-grid" id="grid-supervisor">
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">اسم المشرف التربوي</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700;">اسم المشرف</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">تاريخ الزيارة</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700;">_____ / _____ / 2026</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-item-header">
+                                    <span class="info-label editable" contenteditable="true">التقدير العام للمعلم</span>
+                                    <button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest('.info-item').remove()">❌</button>
+                                </div>
+                                <div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700; font-size:1.2rem; color:#166534;">ممتاز</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:14px;">
+                            <div class="sub-header" style="margin-top:0;"><span>نقاط القوة الملاحظة</span></div>
+                            <div class="print-blank editable" contenteditable="true" style="padding:12px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0; min-height:80px; margin-bottom:10px;">
+                                أدوّن هنا أبرز نقاط القوة التي لاحظها المشرف خلال الزيارة الميدانية...
+                            </div>
+                            <div class="sub-header" style="margin-top:0;"><span>التوصيات والمقترحات</span></div>
+                            <div class="print-blank editable" contenteditable="true" style="padding:12px; background:#fffbeb; border-radius:8px; border:1px solid #fde68a; min-height:80px;">
+                                التوصيات والمقترحات التطويرية من المشرف التربوي...
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:18px;">
+                            <div class="info-item">
+                                <div class="info-label">توقيع المشرف التربوي</div>
+                                <div class="editable" contenteditable="true" style="margin-top:8px; min-height:40px; border-bottom:1px solid #cbd5e1;">التوقيع</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">ختم المديرية</div>
+                                <div class="editable" contenteditable="true" style="margin-top:8px; min-height:40px; border-bottom:1px solid #cbd5e1;">الختم</div>
+                            </div>
+                        </div>
+                        <div class="section-images" id="imgs-supervisor"></div>
+                        <div class="links-list" id="links-supervisor"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end sections-container -->
+
+</div><!-- end main-container -->
+
+<!-- فوتر المبرمج -->
+<footer style="background: linear-gradient(135deg,#1e3a8a,#1e40af); color:rgba(255,255,255,0.88); text-align:center; padding:18px 20px; font-size:0.82rem; font-family:'Cairo',sans-serif; margin-top:10px;">
+    <div style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:1rem; font-weight:800; color:#fff;">🖥️ برمجة وتصميم: الأستاذ إياد خضر</div>
+        <div>🏫 مدرسة ابن تيمية الثانوية الشاملة للبنين — لواء بني عبيد</div>
+        <div>📞 <span style="direction:ltr; unicode-bidi:embed;">0776507960</span></div>
+    </div>
+</footer>
+
+<!-- مودال إضافة رابط -->
+<div class="modal-overlay" id="linkModal">
+    <div class="modal-box">
+        <h3>🔗 إضافة رابط جديد</h3>
+        <input type="text" class="modal-input" id="linkText" placeholder="نص الرابط (مثال: شهادة التميز)">
+        <input type="url" class="modal-input" id="linkUrl" placeholder="الرابط (مثال: https://drive.google.com/...)">
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeLinkModal()">إلغاء</button>
+            <button class="btn btn-primary" onclick="confirmAddLink()">إضافة الرابط</button>
+        </div>
+    </div>
+</div>
+
+<!-- مودال إضافة قسم جديد -->
+<div class="modal-overlay" id="sectionModal">
+    <div class="modal-box">
+        <h3>➕ إضافة قسم جديد</h3>
+        <input type="text" class="modal-input" id="newSectionTitle" placeholder="عنوان القسم الجديد">
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="document.getElementById('sectionModal').classList.remove('active')">إلغاء</button>
+            <button class="btn btn-primary" onclick="confirmAddSection()">إضافة القسم</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast">تم التحديث</div>
+
+<script>
+// ==================== متغيرات عامة ====================
+let currentLinkTarget = null;
+let sectionCounter = 9;
+
+// ==================== السحب والإفلات ====================
+function initSortables() {
+    // سحب الأقسام
+    if (window.Sortable) {
+        Sortable.create(document.getElementById('sections-container'), {
+            handle: '.section-separator',
+            animation: 200,
+            ghostClass: 'sortable-ghost',
+            onEnd: function() { showToast('✅ تم إعادة ترتيب الأقسام'); }
+        });
+
+        // سحب الكروت داخل كل قسم
+        document.querySelectorAll('.cards-wrapper').forEach(function(wrapper) {
+            Sortable.create(wrapper, {
+                handle: '.card-drag-handle',
+                animation: 200,
+                ghostClass: 'sortable-ghost',
+                onEnd: function() { showToast('✅ تم إعادة ترتيب الكروت'); }
+            });
+        });
+    }
+}
+
+window.addEventListener('load', function() {
+    loadPortfolio();
+    initSortables();
+    loadCoverImage();
+    loadHeaderPhoto();
+    addMoveButtonsToAllCards();
+    setupPrintHandlers();
+    initEvalSelects();
+    calcPortfolioCompletion();
+    // تحديث الاكتمال عند أي تغيير
+    document.addEventListener('input', function() { calcPortfolioCompletion(); });
+});
+
+// ==================== تحريك الكروت بالأسهم ====================
+function moveCard(cardEl, dir) {
+    var wrapper = cardEl.closest('.cards-wrapper');
+    if (!wrapper) return;
+    var cards = Array.from(wrapper.querySelectorAll(':scope > .card'));
+    var idx = cards.indexOf(cardEl);
+    if (dir === 'up' && idx > 0) {
+        wrapper.insertBefore(cardEl, cards[idx - 1]);
+        showToast('⬆️ تم تحريك الكرت للأعلى');
+    } else if (dir === 'down' && idx < cards.length - 1) {
+        wrapper.insertBefore(cards[idx + 1], cardEl);
+        showToast('⬇️ تم تحريك الكرت للأسفل');
+    }
+}
+
+function addMoveButtonsToAllCards() {
+    document.querySelectorAll('.card').forEach(function(card) {
+        var actions = card.querySelector('.card-actions');
+        if (actions && !actions.querySelector('.move-btn')) {
+            var upBtn = document.createElement('button');
+            upBtn.className = 'action-btn move-btn';
+            upBtn.title = 'تحريك للأعلى';
+            upBtn.innerHTML = '▲';
+            upBtn.style.cssText = 'color:#1e3a8a;font-size:0.75rem;';
+            upBtn.addEventListener('click', function() { moveCard(card, 'up'); });
+
+            var downBtn = document.createElement('button');
+            downBtn.className = 'action-btn move-btn';
+            downBtn.title = 'تحريك للأسفل';
+            downBtn.innerHTML = '▼';
+            downBtn.style.cssText = 'color:#1e3a8a;font-size:0.75rem;';
+            downBtn.addEventListener('click', function() { moveCard(card, 'down'); });
+
+            actions.insertBefore(downBtn, actions.firstChild);
+            actions.insertBefore(upBtn, actions.firstChild);
+        }
+    });
+}
+
+// ==================== إزالة الصفحات الفارغة عند الطباعة ====================
+function setupPrintHandlers() {
+    window.addEventListener('beforeprint', function() {
+        // إخفاء الأقسام التي جميع كروتها مخفية
+        document.querySelectorAll('.section-block').forEach(function(sec) {
+            var wrapper = sec.querySelector('.cards-wrapper');
+            if (!wrapper) return;
+            var visibleCards = wrapper.querySelectorAll('.card:not(.hidden-state)');
+            if (visibleCards.length === 0) {
+                sec.classList.add('print-empty');
+            }
+        });
+    });
+    window.addEventListener('afterprint', function() {
+        document.querySelectorAll('.section-block.print-empty').forEach(function(sec) {
+            sec.classList.remove('print-empty');
+        });
+    });
+}
+
+// ==================== إخفاء / إظهار ====================
+function toggleVisibility(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('hidden-state');
+    showToast('👁️ تم تحديث حالة الرؤية');
+}
+
+// ==================== حسابات الجداول ====================
+function calcTotals() {
+    document.querySelectorAll('.term-table').forEach(function(table) {
+        var total = 0;
+        table.querySelectorAll('.lessons-input').forEach(function(inp) {
+            var row = inp.closest('tr');
+            if (row && !row.classList.contains('hidden-state')) {
+                var v = parseInt(inp.value);
+                if (!isNaN(v)) total += v;
+            }
+        });
+        var zone = table.querySelector('.term-total');
+        if (zone) zone.textContent = total;
+    });
+}
+
+// ==================== إضافة صف مادة ====================
+function addLessonRow(tableId) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var tbody = table.querySelector('tbody');
+    var id = 'row-' + Date.now();
+    var tr = document.createElement('tr');
+    tr.id = id;
+    tr.innerHTML =
+        '<td><span class="editable" contenteditable="true">مادة جديدة</span></td>' +
+        '<td><span class="editable" contenteditable="true">الصف / الشعبة</span></td>' +
+        '<td><input type="number" class="lessons-input" value="4" oninput="calcTotals()" style="width:55px; padding:3px; font-weight:700; text-align:center;"></td>' +
+        '<td><span class="editable" contenteditable="true">أكاديمي</span></td>' +
+        '<td>' +
+            '<button class="action-btn eye" onclick="toggleVisibility(\'' + id + '\')">👁️</button>' +
+            '<button class="action-btn red" onclick="this.closest(\'tr\').remove(); calcTotals();">❌</button>' +
+        '</td>';
+    tbody.appendChild(tr);
+    calcTotals();
+    showToast('➕ تم إضافة مادة');
+}
+
+// ==================== إضافة فصل دراسي ====================
+function addTermTable() {
+    var container = document.getElementById('terms-container');
+    var gid = 'tg-' + Date.now();
+    var tid = 'tt-' + Date.now();
+    var rid = 'tr-' + Date.now();
+    var div = document.createElement('div');
+    div.id = gid;
+    div.innerHTML =
+        '<div class="sub-header">' +
+            '<span class="editable" contenteditable="true">الفصل الدراسي الجديد</span>' +
+            '<div style="display:flex;gap:6px;">' +
+                '<button class="action-btn" onclick="addLessonRow(\'' + tid + '\')">➕ مادة</button>' +
+                '<button class="action-btn red" onclick="document.getElementById(\'' + gid + '\').remove(); calcTotals();">❌ حذف الفصل</button>' +
+            '</div>' +
+        '</div>' +
+        '<div class="table-responsive">' +
+            '<table id="' + tid + '" class="term-table">' +
+                '<thead><tr><th>المادة</th><th>الصف/الشعبة</th><th>الحصص</th><th>النوع</th><th>إجراء</th></tr></thead>' +
+                '<tbody>' +
+                    '<tr id="' + rid + '">' +
+                        '<td><span class="editable" contenteditable="true">المادة</span></td>' +
+                        '<td><span class="editable" contenteditable="true">الشعبة</span></td>' +
+                        '<td><input type="number" class="lessons-input" value="4" oninput="calcTotals()" style="width:55px;padding:3px;font-weight:700;text-align:center;"></td>' +
+                        '<td><span class="editable" contenteditable="true">أكاديمي</span></td>' +
+                        '<td><button class="action-btn red" onclick="this.closest(\'tr\').remove(); calcTotals();">❌</button></td>' +
+                    '</tr>' +
+                '</tbody>' +
+                '<tfoot><tr class="total-row"><td colspan="2">المجموع:</td><td class="term-total" style="text-align:center;">4</td><td colspan="2"></td></tr></tfoot>' +
+            '</table>' +
+        '</div>';
+    container.appendChild(div);
+    calcTotals();
+    showToast('✨ تم إضافة فصل دراسي');
+}
+
+// ==================== إضافة حقل معلومات ====================
+function addInfoField(gridId) {
+    var grid = document.getElementById(gridId);
+    if (!grid) return;
+    var div = document.createElement('div');
+    div.className = 'info-item';
+    div.innerHTML =
+        '<div class="info-item-header">' +
+            '<span class="info-label editable" contenteditable="true">اسم الحقل</span>' +
+            '<button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest(\'.info-item\').remove()">❌</button>' +
+        '</div>' +
+        '<div class="info-value editable" contenteditable="true" style="width:100%; font-weight:700;">القيمة</div>';
+    grid.appendChild(div);
+    showToast('➕ تم إضافة حقل');
+}
+
+// ==================== إضافة كرت إلى قسم ====================
+function addCardToSection(wrapperId) {
+    var wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    var id = 'card-' + Date.now();
+    var gid = 'grid-' + Date.now();
+    var imgId = 'imgs-' + Date.now();
+    var linkId = 'lnks-' + Date.now();
+    var div = document.createElement('div');
+    div.className = 'card';
+    div.id = id;
+    div.innerHTML =
+        '<div class="card-drag-handle" title="اسحب">⠿</div>' +
+        '<div class="card-title-area">' +
+            '<div class="card-title editable" contenteditable="true">عنوان الكرت الجديد</div>' +
+            '<div class="card-actions">' +
+                '<button class="action-btn green" onclick="addInfoField(\'' + gid + '\')">➕ حقل</button>' +
+                '<button class="action-btn" onclick="addLinkToCard(\'' + linkId + '\')">🔗 رابط</button>' +
+                '<button class="action-btn" onclick="addImageToCard(\'' + imgId + '\')">🖼️ صورة</button>' +
+                '<button class="action-btn eye" onclick="toggleVisibility(\'' + id + '\')">👁️</button>' +
+                '<button class="action-btn red" onclick="removeCard(\'' + id + '\')">❌</button>' +
+            '</div>' +
+        '</div>' +
+        '<div class="info-grid" id="' + gid + '">' +
+            '<div class="info-item">' +
+                '<div class="info-item-header"><span class="info-label editable" contenteditable="true">الحقل</span><button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest(\'.info-item\').remove()">❌</button></div>' +
+                '<div class="info-value editable" contenteditable="true" style="font-weight:700;">القيمة</div>' +
+            '</div>' +
+        '</div>' +
+        '<div class="section-images" id="' + imgId + '"></div>' +
+        '<div class="links-list" id="' + linkId + '"></div>';
+    wrapper.appendChild(div);
+    if (window.Sortable) {
+        Sortable.create(wrapper, {
+            handle: '.card-drag-handle',
+            animation: 200,
+            ghostClass: 'sortable-ghost'
+        });
+    }
+    // إضافة أزرار الأسهم للكرت الجديد
+    var actions = div.querySelector('.card-actions');
+    if (actions) {
+        var upBtn = document.createElement('button');
+        upBtn.className = 'action-btn move-btn';
+        upBtn.title = 'تحريك للأعلى'; upBtn.innerHTML = '▲';
+        upBtn.style.cssText = 'color:#1e3a8a;font-size:0.75rem;';
+        upBtn.addEventListener('click', function() { moveCard(div, 'up'); });
+        var downBtn = document.createElement('button');
+        downBtn.className = 'action-btn move-btn';
+        downBtn.title = 'تحريك للأسفل'; downBtn.innerHTML = '▼';
+        downBtn.style.cssText = 'color:#1e3a8a;font-size:0.75rem;';
+        downBtn.addEventListener('click', function() { moveCard(div, 'down'); });
+        actions.insertBefore(downBtn, actions.firstChild);
+        actions.insertBefore(upBtn, actions.firstChild);
+    }
+    showToast('➕ تم إنشاء كرت جديد');
+}
+
+// ==================== حذف كرت ====================
+function removeCard(id) {
+    if (confirm('هل تريد حذف هذا الكرت؟')) {
+        var el = document.getElementById(id);
+        if (el) el.remove();
+    }
+}
+
+// ==================== إضافة قسم ====================
+function addNewSection() {
+    document.getElementById('sectionModal').classList.add('active');
+    document.getElementById('newSectionTitle').value = '';
+    setTimeout(function() { document.getElementById('newSectionTitle').focus(); }, 100);
+}
+
+function confirmAddSection() {
+    var title = document.getElementById('newSectionTitle').value.trim();
+    if (!title) { alert('يرجى كتابة عنوان القسم'); return; }
+    sectionCounter++;
+    var sid = 'sec-dyn-' + Date.now();
+    var wid = 'wrapper-dyn-' + Date.now();
+    var bodyId = 'body-dyn-' + Date.now();
+    var container = document.getElementById('sections-container');
+    var div = document.createElement('div');
+    div.className = 'section-block';
+    div.id = sid;
+    div.innerHTML =
+        '<div class="section-separator">' +
+            '<span class="drag-handle">⠿</span>' +
+            '<span class="editable" contenteditable="true" style="flex:1;">' + title + '</span>' +
+            '<div class="section-actions">' +
+                '<button class="action-btn blue" onclick="addCardToSection(\'' + wid + '\')">➕ كرت</button>' +
+                '<button class="action-btn eye" onclick="toggleVisibility(\'' + bodyId + '\')">👁️ إخفاء</button>' +
+                '<button class="action-btn red" onclick="if(confirm(\'حذف هذا القسم؟\')) document.getElementById(\'' + sid + '\').remove()">❌ حذف القسم</button>' +
+            '</div>' +
+        '</div>' +
+        '<div id="' + bodyId + '">' +
+            '<div class="cards-wrapper" id="' + wid + '"></div>' +
+        '</div>';
+    container.appendChild(div);
+    document.getElementById('sectionModal').classList.remove('active');
+    addCardToSection(wid);
+    showToast('✨ تم إضافة قسم جديد');
+}
+
+// ==================== إضافة صورة إلى كرت ====================
+function addImageToCard(containerId) {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = true;
+    input.onchange = function(e) {
+        var container = document.getElementById(containerId);
+        if (!container) return;
+        for (var i = 0; i < e.target.files.length; i++) {
+            (function(file) {
+                var reader = new FileReader();
+                reader.onload = function(ev) {
+                    var imgDiv = document.createElement('div');
+                    imgDiv.className = 'section-img-item';
+                    var cap = file.name.split('.')[0];
+                    imgDiv.innerHTML =
+                        '<img src="' + ev.target.result + '" alt="' + cap + '">' +
+                        '<button class="img-remove" onclick="this.closest(\'.section-img-item\').remove()">✕</button>' +
+                        '<div class="img-caption editable" contenteditable="true">' + cap + '</div>';
+                    container.appendChild(imgDiv);
+                };
+                reader.readAsDataURL(file);
+            })(e.target.files[i]);
+        }
+        showToast('🖼️ تم رفع الصور');
+    };
+    input.click();
+}
+
+// ==================== إضافة رابط ====================
+function addLinkToCard(containerId) {
+    currentLinkTarget = containerId;
+    document.getElementById('linkText').value = '';
+    document.getElementById('linkUrl').value = '';
+    document.getElementById('linkModal').classList.add('active');
+    setTimeout(function() { document.getElementById('linkText').focus(); }, 100);
+}
+
+function closeLinkModal() {
+    document.getElementById('linkModal').classList.remove('active');
+    currentLinkTarget = null;
+}
+
+function confirmAddLink() {
+    var text = document.getElementById('linkText').value.trim();
+    var url = document.getElementById('linkUrl').value.trim();
+    if (!text || !url) { alert('يرجى ملء الحقلين'); return; }
+    if (!url.startsWith('http')) url = 'https://' + url;
+    var container = document.getElementById(currentLinkTarget);
+    if (!container) { closeLinkModal(); return; }
+    var linkId = 'link-' + Date.now();
+    var div = document.createElement('div');
+    div.className = 'link-item';
+    div.id = linkId;
+    div.innerHTML =
+        '<span class="link-icon">🔗</span>' +
+        '<a href="' + url + '" target="_blank" rel="noopener">' + text + '</a>' +
+        '<div class="link-actions">' +
+            '<button class="action-btn eye" onclick="toggleVisibility(\'' + linkId + '\')">👁️</button>' +
+            '<button class="action-btn red" onclick="document.getElementById(\'' + linkId + '\').remove()">❌</button>' +
+        '</div>';
+    container.appendChild(div);
+    closeLinkModal();
+    showToast('🔗 تم إضافة الرابط');
+}
+
+// إغلاق المودال بالضغط خارجه
+document.addEventListener('click', function(e) {
+    var linkModal = document.getElementById('linkModal');
+    var sectionModal = document.getElementById('sectionModal');
+    if (e.target === linkModal) closeLinkModal();
+    if (e.target === sectionModal) sectionModal.classList.remove('active');
+});
+
+// ==================== معرض الصور ====================
+function uploadGalleryImages(e) {
+    var grid = document.getElementById('main-gallery-grid');
+    for (var i = 0; i < e.target.files.length; i++) {
+        (function(file, idx) {
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var uid = 'gimg-' + Date.now() + '-' + idx;
+                var div = document.createElement('div');
+                div.className = 'gallery-item';
+                div.id = uid;
+                div.innerHTML =
+                    '<div class="gallery-img-wrapper"><img src="' + ev.target.result + '" alt="صورة"></div>' +
+                    '<div class="gallery-caption editable" contenteditable="true">' + file.name.split('.')[0] + '</div>' +
+                    '<div class="gallery-item-actions">' +
+                        '<button class="gallery-item-btn" onclick="toggleVisibility(\'' + uid + '\')">👁️ حجب</button>' +
+                        '<button class="gallery-item-btn" style="color:#b91c1c;" onclick="this.closest(\'.gallery-item\').remove()">❌ حذف</button>' +
+                    '</div>';
+                grid.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        })(e.target.files[i], i);
+    }
+    showToast('🖼️ تم رفع الصور في المعرض');
+}
+
+// ==================== صورة الغلاف ==================== 
+document.getElementById('coverUploadBtn').addEventListener('click', function() {
+    document.getElementById('coverImageInput').click();
+});
+
+document.getElementById('coverClearBtn').addEventListener('click', function() {
+    localStorage.removeItem('cover_img');
+    document.getElementById('coverPreviewSpan').style.display = 'none';
+    document.getElementById('coverClearBtn').style.display = 'none';
+    var coverPage = document.getElementById('printCoverPage');
+    var coverPrint = document.getElementById('coverImagePreviewPrint');
+    coverPrint.src = '';
+    coverPrint.style.display = 'none';
+    coverPage.classList.add('no-cover-img');
+    document.getElementById('coverImageInput').value = '';
+    showToast('🗑️ تم مسح صورة الغلاف');
+});
+
+document.getElementById('coverImageInput').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+        var data = ev.target.result;
+        localStorage.setItem('cover_img', data);
+        var prev = document.getElementById('coverPreviewSpan');
+        prev.style.display = 'inline-flex';
+        prev.innerHTML = '<img src="' + data + '" alt="غلاف"> <span>غلاف PDF</span>';
+        document.getElementById('coverClearBtn').style.display = 'inline-flex';
+        var coverPage = document.getElementById('printCoverPage');
+        var coverPrint = document.getElementById('coverImagePreviewPrint');
+        coverPrint.src = data;
+        coverPrint.style.display = 'block';
+        coverPage.classList.remove('no-cover-img');
+        showToast('📸 تم رفع صورة الغلاف — ستظهر صفحة كاملة في PDF');
+    };
+    reader.readAsDataURL(file);
+});
+
+function loadCoverImage() {
+    var data = localStorage.getItem('cover_img');
+    if (!data) return;
+    var prev = document.getElementById('coverPreviewSpan');
+    prev.style.display = 'inline-flex';
+    prev.innerHTML = '<img src="' + data + '" alt="غلاف"> <span>غلاف</span>';
+    document.getElementById('coverClearBtn').style.display = 'inline-flex';
+    var coverPage = document.getElementById('printCoverPage');
+    var coverPrint = document.getElementById('coverImagePreviewPrint');
+    coverPrint.src = data;
+    coverPrint.style.display = 'block';
+    coverPage.classList.remove('no-cover-img');
+}
+
+// ==================== الصورة الشخصية ====================
+function uploadHeaderPhoto(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+        document.getElementById('header-photo').src = ev.target.result;
+        localStorage.setItem('header_photo', ev.target.result);
+        showToast('📷 تم تحديث الصورة الشخصية');
+    };
+    reader.readAsDataURL(file);
+}
+
+function loadHeaderPhoto() {
+    var data = localStorage.getItem('header_photo');
+    if (data) document.getElementById('header-photo').src = data;
+    var fit = localStorage.getItem('photo_fit');
+    if (fit === 'contain') {
+        document.getElementById('header-photo').classList.add('fit-contain');
+    }
+}
+
+// ==================== دوال الجداول ====================
+function addTrainingRow(tableId) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var tbody = table.querySelector('tbody');
+    var n = tbody.rows.length + 1;
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+        '<td>' + n + '</td>' +
+        '<td><span class="editable" contenteditable="true">اسم الدورة</span></td>' +
+        '<td><span class="editable" contenteditable="true">الجهة</span></td>' +
+        '<td><span class="editable" contenteditable="true">2025/01/01</span></td>' +
+        '<td><span class="editable" contenteditable="true">24</span></td>' +
+        '<td><select class="eval-select" onchange="updateEvalBadge(this)"><option value="ممتاز">ممتاز</option><option value="جيد جداً" selected>جيد جداً</option><option value="جيد">جيد</option><option value="مقبول">مقبول</option><option value="بحاجة تطوير">بحاجة تطوير</option></select></td>' +
+        '<td><button class="action-btn red" onclick="this.closest(\'tr\').remove()">❌</button></td>';
+    tbody.appendChild(tr);
+    tr.querySelector('.eval-select').setAttribute('data-val', 'جيد جداً');
+    showToast('➕ تم إضافة دورة');
+}
+
+function addSkillRow(gridId) {
+    var grid = document.getElementById(gridId);
+    if (!grid) return;
+    var div = document.createElement('div');
+    div.className = 'info-item';
+    div.innerHTML =
+        '<div class="info-item-header">' +
+            '<span class="info-label editable" contenteditable="true">مهارة جديدة</span>' +
+            '<button class="action-btn red" style="padding:1px 5px; font-size:0.7rem;" onclick="this.closest(\'.info-item\').remove()">❌</button>' +
+        '</div>' +
+        '<div class="progress-bar-wrapper"><div class="progress-bar" style="width:70%"></div></div>' +
+        '<div class="editable" contenteditable="true" style="font-size:0.78rem; color:#64748b; font-weight:700;">جيد جداً — 70%</div>';
+    grid.appendChild(div);
+}
+
+function addAchievementItem(listId) {
+    var list = document.getElementById(listId);
+    if (!list) return;
+    var uid = 'ach-dyn-' + Date.now();
+    var imgAreaId = 'cert-img-' + Date.now();
+    var div = document.createElement('div');
+    div.className = 'cert-card';
+    div.id = uid;
+    div.innerHTML =
+        '<div class="cert-icon editable" contenteditable="true">🏆</div>' +
+        '<div class="cert-info">' +
+            '<div class="cert-title editable" contenteditable="true">عنوان الإنجاز الجديد</div>' +
+            '<div class="cert-meta editable" contenteditable="true">الجهة — التاريخ | التفاصيل</div>' +
+            '<div class="cert-img-area" id="' + imgAreaId + '" style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;"></div>' +
+            '<button class="action-btn" style="margin-top:6px; font-size:0.72rem;" onclick="addCertImage(\'' + imgAreaId + '\')">🖼️ إرفاق صورة/شهادة</button>' +
+        '</div>' +
+        '<button class="action-btn red" style="flex-shrink:0;" onclick="this.closest(\'.cert-card\').remove()">❌</button>';
+    list.appendChild(div);
+}
+
+function addCertRow(tableId) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var tbody = table.querySelector('tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+        '<td><span class="editable" contenteditable="true">اسم الشهادة</span></td>' +
+        '<td><span class="editable" contenteditable="true">الجهة</span></td>' +
+        '<td><span class="editable" contenteditable="true">2025/01/01</span></td>' +
+        '<td><span class="editable" contenteditable="true">3 سنوات</span></td>' +
+        '<td><span class="badge badge-green">فعّالة</span></td>' +
+        '<td><a href="#" class="editable" contenteditable="true" style="color:#0369a1;">رابط</a></td>' +
+        '<td><button class="action-btn red" onclick="this.closest(\'tr\').remove()">❌</button></td>';
+    tbody.appendChild(tr);
+}
+
+function addResultRow(tableId) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var tbody = table.querySelector('tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+        '<td><span class="editable" contenteditable="true">الشعبة</span></td>' +
+        '<td><span class="editable" contenteditable="true">30</span></td>' +
+        '<td><span class="editable" contenteditable="true">85.0</span></td>' +
+        '<td><span class="editable" contenteditable="true">95%</span></td>' +
+        '<td><span class="editable" contenteditable="true">97</span></td>' +
+        '<td><span class="editable" contenteditable="true">60</span></td>' +
+        '<td><button class="action-btn red" onclick="this.closest(\'tr\').remove()">❌</button></td>';
+    tbody.appendChild(tr);
+}
+
+function addPlanRow(tableId) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var tbody = table.querySelector('tbody');
+    var n = tbody.rows.length + 1;
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+        '<td>' + n + '</td>' +
+        '<td><span class="editable" contenteditable="true">الوحدة الجديدة</span></td>' +
+        '<td><span class="editable" contenteditable="true">المحاور الرئيسية</span></td>' +
+        '<td><span class="editable" contenteditable="true">4 أسابيع</span></td>' +
+        '<td><span class="editable" contenteditable="true">اختبار + تقرير</span></td>' +
+        '<td><a href="#" class="editable" contenteditable="true" style="color:#0369a1;">رابط المورد</a></td>' +
+        '<td><button class="action-btn red" onclick="this.closest(\'tr\').remove()">❌</button></td>';
+    tbody.appendChild(tr);
+}
+
+function addPartnerRow(tableId) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var tbody = table.querySelector('tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+        '<td><span class="editable" contenteditable="true">اسم الجهة الشريكة</span></td>' +
+        '<td><span class="editable" contenteditable="true">نوع التعاون</span></td>' +
+        '<td><span class="editable" contenteditable="true">2025</span></td>' +
+        '<td><span class="editable" contenteditable="true">النتائج والمخرجات</span></td>' +
+        '<td><span class="badge badge-blue">قيد التنفيذ</span></td>' +
+        '<td><button class="action-btn red" onclick="this.closest(\'tr\').remove()">❌</button></td>';
+    tbody.appendChild(tr);
+}
+
+function addEvalRow(tableId) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var tbody = table.querySelector('tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+        '<td><span class="editable" contenteditable="true">معيار جديد</span></td>' +
+        '<td><span class="editable" contenteditable="true">وصف المعيار</span></td>' +
+        '<td><select class="eval-select" onchange="updateEvalBadge(this)">' +
+            '<option value="ممتاز">ممتاز</option>' +
+            '<option value="جيد جداً" selected>جيد جداً</option>' +
+            '<option value="جيد">جيد</option>' +
+            '<option value="مقبول">مقبول</option>' +
+            '<option value="بحاجة تطوير">بحاجة تطوير</option>' +
+        '</select></td>' +
+        '<td><span class="editable" contenteditable="true">الأدلة والشواهد</span></td>' +
+        '<td><button class="action-btn red" onclick="this.closest(\'tr\').remove()">❌</button></td>';
+    tbody.appendChild(tr);
+    updateEvalBadge(tr.querySelector('.eval-select'));
+}
+
+function addGoalRow(tableId) {
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var tbody = table.querySelector('tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+        '<td><span class="editable" contenteditable="true">الهدف الجديد</span></td>' +
+        '<td><span class="editable" contenteditable="true">الإجراءات</span></td>' +
+        '<td><span class="editable" contenteditable="true">2026</span></td>' +
+        '<td><span class="editable" contenteditable="true">مؤشرات النجاح</span></td>' +
+        '<td><span class="badge badge-yellow">متوسطة</span></td>' +
+        '<td><button class="action-btn red" onclick="this.closest(\'tr\').remove()">❌</button></td>';
+    tbody.appendChild(tr);
+}
+
+function addProjectItem(listId) {
+    var list = document.getElementById(listId);
+    if (!list) return;
+    var div = document.createElement('div');
+    div.className = 'cert-card';
+    div.style.background = 'linear-gradient(135deg, #f0fdf4, #ecfdf5)';
+    div.innerHTML =
+        '<div class="cert-icon editable" contenteditable="true">💡</div>' +
+        '<div class="cert-info">' +
+            '<div class="cert-title editable" contenteditable="true">اسم المشروع الجديد</div>' +
+            '<div class="cert-meta editable" contenteditable="true">اسم الطالب — الصف — وصف المشروع</div>' +
+        '</div>' +
+        '<span class="badge badge-green" style="flex-shrink:0;">متميز</span>' +
+        '<button class="action-btn red" style="flex-shrink:0;" onclick="this.closest(\'.cert-card\').remove()">❌</button>';
+    list.appendChild(div);
+}
+
+function togglePhotoFit() {
+    var img = document.getElementById('header-photo');
+    img.classList.toggle('fit-contain');
+    var isCover = !img.classList.contains('fit-contain');
+    localStorage.setItem('photo_fit', isCover ? 'cover' : 'contain');
+    showToast(isCover ? '🔵 الصورة: ملء الدائرة' : '🔲 الصورة: احتواء كامل');
+}
+
+// ==================== تبديل إخفاء أعمدة جدول التدريب ====================
+var hiddenTrainingCols = [];
+function toggleTrainingColumn() {
+    var table = document.getElementById('table-training');
+    if (!table) return;
+    var headers = table.querySelectorAll('th');
+    var cols = Array.from(headers).map(function(th, i) { return { idx: i, text: th.textContent.trim() }; });
+    var visible = cols.filter(function(c) { return !hiddenTrainingCols.includes(c.idx); });
+    var colList = visible.map(function(c) { return (hiddenTrainingCols.includes(c.idx) ? '👁️ ' : '✅ ') + c.text; }).join('\n') +
+        '\n\nاكتب رقم العمود لإخفائه/إظهاره (1-' + headers.length + '):';
+    var input = prompt(colList);
+    if (!input) return;
+    var idx = parseInt(input) - 1;
+    if (isNaN(idx) || idx < 0 || idx >= headers.length) return;
+    if (hiddenTrainingCols.includes(idx)) {
+        hiddenTrainingCols = hiddenTrainingCols.filter(function(i) { return i !== idx; });
+        table.querySelectorAll('tr').forEach(function(tr) {
+            var cells = tr.querySelectorAll('th, td');
+            if (cells[idx]) cells[idx].style.display = '';
+        });
+        showToast('👁️ تم إظهار العمود');
+    } else {
+        hiddenTrainingCols.push(idx);
+        table.querySelectorAll('tr').forEach(function(tr) {
+            var cells = tr.querySelectorAll('th, td');
+            if (cells[idx]) cells[idx].style.display = 'none';
+        });
+        showToast('🙈 تم إخفاء العمود');
+    }
+}
+
+// ==================== إرفاق صورة لبطاقة إنجاز ====================
+function addCertImage(containerId) {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = true;
+    input.onchange = function(e) {
+        var container = document.getElementById(containerId);
+        if (!container) return;
+        for (var i = 0; i < e.target.files.length; i++) {
+            (function(file) {
+                var reader = new FileReader();
+                reader.onload = function(ev) {
+                    var imgDiv = document.createElement('div');
+                    imgDiv.style.cssText = 'position:relative; display:inline-block;';
+                    imgDiv.innerHTML =
+                        '<img src="' + ev.target.result + '" style="width:80px;height:60px;object-fit:contain;border:1px solid #e2e8f0;border-radius:6px;background:#f8fafc;" alt="شاهد">' +
+                        '<button onclick="this.closest(\'div\').remove()" style="position:absolute;top:1px;left:1px;background:rgba(185,28,28,0.85);color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:0.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>';
+                    container.appendChild(imgDiv);
+                };
+                reader.readAsDataURL(file);
+            })(e.target.files[i]);
+        }
+        showToast('🖼️ تم إرفاق الصورة');
+    };
+    input.click();
+}
+
+
+function updateEvalBadge(sel) {
+    sel.setAttribute('data-val', sel.value);
+}
+
+// تطبيق اللون على جميع الـ selects عند التحميل
+function initEvalSelects() {
+    document.querySelectorAll('.eval-select').forEach(function(sel) {
+        sel.setAttribute('data-val', sel.value);
+    });
+}
+
+// ==================== حساب اكتمال الملف ====================
+function calcPortfolioCompletion() {
+    var fields = document.querySelectorAll('.editable[contenteditable="true"]');
+    var filled = 0;
+    fields.forEach(function(f) {
+        var txt = f.textContent.trim();
+        if (txt && txt !== 'القيمة' && txt !== 'اسم الحقل' && txt !== 'التوقيع هنا') filled++;
+    });
+    var pct = fields.length > 0 ? Math.min(100, Math.round((filled / fields.length) * 100)) : 0;
+    var bar = document.getElementById('completion-bar-inner');
+    var label = document.getElementById('completion-label');
+    if (bar) bar.style.width = pct + '%';
+    if (label) label.textContent = 'اكتمال الملف: ' + pct + '%';
+}
+
+
+function savePortfolio() {
+    try {
+        var body = document.getElementById('sections-container').outerHTML;
+        localStorage.setItem('pf_body_v14', body);
+        var header = document.getElementById('main-header').innerHTML;
+        localStorage.setItem('pf_header_v14', header);
+        showToast('💾 تم حفظ جميع التعديلات');
+    } catch(e) {
+        showToast('⚠️ الحجم كبير، بعض الصور قد لا تُحفظ');
+    }
+}
+
+function loadPortfolio() {
+    var savedBody = localStorage.getItem('pf_body_v14');
+    if (savedBody) {
+        document.getElementById('sections-container').outerHTML = savedBody;
+        calcTotals();
+        setTimeout(function() {
+            initSortables();
+            addMoveButtonsToAllCards();
+            initEvalSelects();
+        }, 200);
+    }
+    var savedHeader = localStorage.getItem('pf_header_v14');
+    if (savedHeader) {
+        document.getElementById('main-header').innerHTML = savedHeader;
+    }
+    calcTotals();
+}
+
+function resetPortfolio() {
+    if (confirm('سيتم حذف جميع التعديلات والعودة للنسخة الأصلية. هل أنت متأكد؟')) {
+        localStorage.clear();
+        location.reload();
+    }
+}
+
+// ==================== التوست ====================
+function showToast(msg) {
+    var toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = 'show';
+    setTimeout(function() { toast.className = ''; }, 3000);
+}
+</script>
+</body>
+</html>
