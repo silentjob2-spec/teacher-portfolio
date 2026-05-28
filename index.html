@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>منصة ملف إنجاز المعلم - مسافة قابلة للسحب بالكامل</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
@@ -727,73 +727,6 @@ body {
 }
 
 .table-wrap { overflow-x: auto; margin-top: 4px; }
-
-/* ── مجموعات الأقسام في الشريط ── */
-.sb-group-header {
-  margin: 12px -12px 6px;
-  padding: 6px 14px;
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.sb-group-header.blue   { background:#eff6ff; color:#1e40af; border-right:3px solid #1e40af; }
-.sb-group-header.green  { background:#f0fdf4; color:#166534; border-right:3px solid #166534; }
-.sb-group-header.amber  { background:#fffbeb; color:#92400e; border-right:3px solid #d97706; }
-.sb-group-header.purple { background:#faf5ff; color:#6b21a8; border-right:3px solid #7c3aed; }
-.sb-group-header.teal   { background:#f0fdfa; color:#115e59; border-right:3px solid #0d9488; }
-
-/* ── بطاقة القسم المحسّنة ── */
-.section-template {
-  background: linear-gradient(135deg, #eff6ff, #f0fdf4);
-  border: 1.5px solid #bfdbfe;
-  border-radius: 8px;
-  padding: 8px 10px;
-  margin-bottom: 6px;
-  transition: all 0.15s;
-}
-.section-template:hover { border-color: var(--primary); transform: translateX(-2px); box-shadow: 0 2px 8px rgba(30,58,138,0.12); }
-.st-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-.st-name { font-size: 0.8rem; font-weight: 800; color: var(--primary); flex:1; }
-.st-desc { font-size: 0.65rem; color: #64748b; margin-top: 2px; line-height: 1.4; }
-
-/* ── عناصر قابلة للتعديل داخل الأقسام ── */
-.editable-list { list-style:none; padding:0; margin:0 0 6px; }
-.editable-list li {
-  position: relative;
-  padding: 5px 22px 5px 28px;
-  font-size: 0.83rem;
-  color: #334155;
-  line-height: 1.6;
-  border-bottom: 1px dashed #f1f5f9;
-  outline: none;
-  cursor: text;
-}
-.editable-list li:last-child { border-bottom: none; }
-.editable-list li::before { content:'•'; position:absolute; right:8px; color:var(--accent); font-weight:900; }
-.editable-list li .li-del {
-  position:absolute; left:4px; top:50%; transform:translateY(-50%);
-  background:none; border:none; color:#fca5a5; font-size:0.7rem;
-  cursor:pointer; opacity:0; transition:opacity 0.15s; padding:1px 3px;
-  font-family:'Cairo',sans-serif;
-}
-.editable-list li:hover .li-del { opacity:1; }
-.add-list-item-btn {
-  font-size:0.7rem; padding:3px 10px;
-  background:#f8fafc; border:1.5px dashed #cbd5e1;
-  border-radius:5px; cursor:pointer; color:#64748b;
-  font-family:'Cairo',sans-serif; font-weight:700;
-  transition:all 0.15s; display:inline-block; margin-top:3px;
-}
-.add-list-item-btn:hover { border-color:var(--primary); color:var(--primary); background:#eff6ff; }
-.section-sub-title {
-  font-size:0.72rem; font-weight:800; color:var(--primary);
-  background:#eff6ff; border-right:3px solid var(--primary);
-  padding:4px 8px; border-radius:0 5px 5px 0;
-  margin:10px 0 6px;
-}
 .content-table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.85rem; }
 .content-table th, .content-table td { padding: 8px 10px; border: 1px solid #e2e8f0; }
 .content-table th { background: #f1f5f9; color: var(--primary); font-weight: 800; }
@@ -930,6 +863,180 @@ body {
 
 .section-hidden { opacity: 0.25; }
 .section-hidden .section-content { display: none; }
+
+
+/* ═══════════════════════════════════════
+   شاشة الموبايل — overlay + تصميم كامل
+═══════════════════════════════════════ */
+#mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: linear-gradient(160deg, #1e3a8a 0%, #1e40af 50%, #0f766e 100%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+  font-family: 'Cairo', Tahoma, sans-serif;
+  color: white;
+  overflow-y: auto;
+}
+#mobile-overlay.active { display: flex; }
+
+.mob-logo {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+  animation: mob-bounce 1.5s infinite;
+}
+@keyframes mob-bounce {
+  0%,100%{ transform: translateY(0); }
+  50%    { transform: translateY(-8px); }
+}
+.mob-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.mob-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
+.mob-notice {
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 380px;
+}
+.mob-notice-icon { font-size: 1.8rem; margin-bottom: 6px; }
+.mob-notice-title {
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+  color: #fde68a;
+}
+.mob-notice-text {
+  font-size: 0.82rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+.mob-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 380px;
+  margin-bottom: 20px;
+}
+.mob-feature {
+  background: rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 12px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.mob-feature-icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+.mob-continue-btn {
+  background: rgba(255,255,255,0.18);
+  border: 2px solid rgba(255,255,255,0.45);
+  border-radius: 12px;
+  color: white;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+.mob-continue-btn:hover { background: rgba(255,255,255,0.28); transform: scale(1.03); }
+.mob-credit {
+  margin-top: 20px;
+  font-size: 0.7rem;
+  opacity: 0.6;
+  line-height: 1.8;
+}
+
+/* ── تعديلات عرض المحتوى على موبايل ── */
+@media (max-width: 768px) {
+  :root { --sidebar-w: 0px; --toolbar-h: 50px; }
+
+  #toolbar {
+    padding: 0 8px;
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tb-brand { font-size: 0.82rem; padding-left: 8px; }
+  .tb-btn   { font-size: 0.72rem; padding: 5px 8px; }
+  .tb-sep   { display: none; }
+
+  #sidebar {
+    position: fixed;
+    right: -280px;
+    top: var(--toolbar-h);
+    bottom: 0;
+    width: 280px;
+    z-index: 500;
+    transition: right 0.3s ease;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+  }
+  #sidebar.mob-open { right: 0; }
+
+  #mob-sidebar-toggle {
+    display: flex !important;
+  }
+  #mob-overlay-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 499;
+  }
+  #mob-overlay-bg.active { display: block; }
+
+  #canvas-area {
+    width: 100vw;
+    padding: 12px 8px;
+    overflow-x: hidden;
+  }
+  #a4-page {
+    transform: none !important;
+    width: 100% !important;
+    min-width: unset;
+    font-size: 0.75rem;
+  }
+  :root { --a4-w: 100%; }
+
+  .page-section { margin: 0 10px 16px; }
+  .section-add-bar { flex-wrap: wrap; gap: 4px; }
+  .sec-add-btn { font-size: 0.68rem; padding: 3px 7px; }
+}
+
+/* زر فتح الشريط الجانبي */
+#mob-sidebar-toggle {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 10px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
 
 @media print {
   @page { margin: 0; size: A4 portrait; }
@@ -1185,12 +1292,53 @@ body {
 </head>
 <body>
 
+<!-- ══ شاشة ترحيب الموبايل ══ -->
+<div id="mobile-overlay">
+  <div class="mob-logo">📘</div>
+  <div class="mob-title">منصة ملف إنجاز المعلم</div>
+  <div class="mob-subtitle">
+    الأستاذ إياد خضر<br>
+    مدرسة ابن تيمية الثانوية الشاملة للبنين
+  </div>
+
+  <div class="mob-notice">
+    <div class="mob-notice-icon">💻</div>
+    <div class="mob-notice-title">هذا الموقع مصمم للكمبيوتر</div>
+    <div class="mob-notice-text">
+      للحصول على أفضل تجربة في بناء ملف الإنجاز،
+      يُنصح باستخدام الكمبيوتر أو اللابتوب.
+      تجربة الموبايل محدودة الوظائف.
+    </div>
+  </div>
+
+  <div class="mob-features">
+    <div class="mob-feature"><span class="mob-feature-icon">🖨️</span>تصدير PDF</div>
+    <div class="mob-feature"><span class="mob-feature-icon">🖼️</span>رفع صور</div>
+    <div class="mob-feature"><span class="mob-feature-icon">📄</span>رفع PDF</div>
+    <div class="mob-feature"><span class="mob-feature-icon">🎨</span>تخصيص التصميم</div>
+    <div class="mob-feature"><span class="mob-feature-icon">↕️</span>سحب وإفلات</div>
+    <div class="mob-feature"><span class="mob-feature-icon">💾</span>حفظ الملف</div>
+  </div>
+
+  <button class="mob-continue-btn" onclick="dismissMobileOverlay()">
+    📱 المتابعة من الموبايل على أي حال
+  </button>
+
+  <div class="mob-credit">
+    📞 0776507960
+  </div>
+</div>
+
+<!-- خلفية معتمة عند فتح الشريط من موبايل -->
+<div id="mob-overlay-bg" onclick="closeMobileSidebar()"></div>
+
 <div id="print-area">
   <div id="print-cover"></div>
   <div id="print-content"></div>
 </div>
 
 <div id="toolbar">
+  <button id="mob-sidebar-toggle" onclick="toggleMobileSidebar()">☰ القائمة</button>
   <span class="tb-brand">📘 ملف إنجاز المعلم</span>
   <button class="tb-btn tb-btn-primary" onclick="exportPDF()">🖨️ تصدير PDF</button>
   <button class="tb-btn tb-btn-success" onclick="saveToFile()">💾 حفظ على الجهاز</button>
@@ -1226,47 +1374,15 @@ body {
       <div class="element-card pdf-upload-card" draggable="true" ondragstart="dragEl(event,'pdf')"><span class="ec-icon">📄</span> رفع ملف PDF (كل الصفحات)</div>
     </div>
     <div class="sidebar-pane" id="pane-sections">
-
-      <!-- ── أساسية ── -->
-      <div class="sb-group-header blue">📋 الأقسام الأساسية</div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">👤 المعلومات الشخصية</div><div class="st-desc">بيانات المعلم والمدرسة والتخصص</div></div><button class="st-add-btn" onclick="addSection('personal')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🎯 الأهداف والرؤية</div><div class="st-desc">الرؤية التعليمية والأهداف المهنية</div></div><button class="st-add-btn" onclick="addSection('goals')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🏆 الإنجازات والشهادات</div><div class="st-desc">الجوائز والشهادات التقديرية</div></div><button class="st-add-btn" onclick="addSection('achievements')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">📊 نتائج الطلاب</div><div class="st-desc">معدلات وإحصائيات الطلاب</div></div><button class="st-add-btn" onclick="addSection('results')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🖼️ معرض الصور</div><div class="st-desc">صور الأنشطة والفعاليات</div></div><button class="st-add-btn" onclick="addSection('gallery')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🔗 الروابط المهنية</div><div class="st-desc">مواقع، مدونات، حسابات تعليمية</div></div><button class="st-add-btn" onclick="addSection('links')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">✏️ قسم مخصص</div><div class="st-desc">قسم فارغ قابل للتخصيص</div></div><button class="st-add-btn" onclick="addSection('custom')">+</button></div></div>
-
-      <!-- ── إدارة وإشراف ── -->
-      <div class="sb-group-header blue">👔 الإدارة والإشراف</div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🔍 الإشراف التربوي المُستلَم</div><div class="st-desc">زيارات المشرف، الدرجة، الملاحظات</div></div><button class="st-add-btn" onclick="addNewSection('supervision_received')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">👁️ الإشراف على المعلمين</div><div class="st-desc">للمعلم المشرف: زياراته وتقاريره</div></div><button class="st-add-btn" onclick="addNewSection('supervision_given')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">📋 اللجان المدرسية</div><div class="st-desc">لجان الامتحانات، النشاط، الجودة</div></div><button class="st-add-btn" onclick="addNewSection('committees')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">📅 المناوبة والانتظار</div><div class="st-desc">سجل المناوبة اليومية والطابور</div></div><button class="st-add-btn" onclick="addNewSection('duty')">+</button></div></div>
-
-      <!-- ── تطوير مهني ── -->
-      <div class="sb-group-header green">📚 التطوير المهني</div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🎓 الدورات والتدريب</div><div class="st-desc">الدورات المكتملة والشهادات</div></div><button class="st-add-btn" onclick="addNewSection('training')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🤝 مجتمعات التعلم المهنية</div><div class="st-desc">اجتماعات، دروس تطبيقية، بحث الدرس</div></div><button class="st-add-btn" onclick="addNewSection('plc')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🔬 البحث التربوي</div><div class="st-desc">أبحاث، أوراق عمل، مقالات</div></div><button class="st-add-btn" onclick="addNewSection('research')">+</button></div></div>
-
-      <!-- ── عمل ميداني ── -->
-      <div class="sb-group-header amber">🏫 العمل الميداني</div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">⚽ الأنشطة اللاصفية</div><div class="st-desc">رحلات، فعاليات، مسابقات</div></div><button class="st-add-btn" onclick="addNewSection('activities')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🌍 خدمة المجتمع</div><div class="st-desc">مبادرات، تطوع، شراكات</div></div><button class="st-add-btn" onclick="addNewSection('community')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🏅 إنجازات الطلاب</div><div class="st-desc">جوائز ومسابقات طلابية</div></div><button class="st-add-btn" onclick="addNewSection('student_awards')">+</button></div></div>
-
-      <!-- ── وثائق وتخطيط ── -->
-      <div class="sb-group-header purple">🗂️ الوثائق والتخطيط</div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">📆 التخطيط الدراسي</div><div class="st-desc">توزيع المنهج، خطط الوحدات</div></div><button class="st-add-btn" onclick="addNewSection('planning')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">💊 الخطط العلاجية والإثرائية</div><div class="st-desc">طلاب متعثرون ومتميزون</div></div><button class="st-add-btn" onclick="addNewSection('remedial')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">👪 التواصل مع أولياء الأمور</div><div class="st-desc">اجتماعات، مراسلات، تقارير</div></div><button class="st-add-btn" onclick="addNewSection('parents')">+</button></div></div>
-
-      <!-- ── تقنية وابتكار ── -->
-      <div class="sb-group-header teal">💡 التقنية والابتكار</div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">💻 التقنية في التعليم</div><div class="st-desc">منصات، تطبيقات، وسائل رقمية</div></div><button class="st-add-btn" onclick="addNewSection('technology')">+</button></div></div>
-      <div class="section-template"><div class="st-row"><div><div class="st-name">🚀 الابتكار التربوي</div><div class="st-desc">أفكار مُطبَّقة ووسائل مصنوعة</div></div><button class="st-add-btn" onclick="addNewSection('innovation')">+</button></div></div>
-
+      <div class="sb-section-title">📑 إضافة قسم جاهز</div>
+      <div class="section-template"><div class="st-name">📌 المعلومات الشخصية</div><button class="st-add-btn" onclick="addSection('personal')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">🎯 الأهداف والرؤية</div><button class="st-add-btn" onclick="addSection('goals')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">🏆 الإنجازات والشهادات</div><button class="st-add-btn" onclick="addSection('achievements')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">💡 المشاريع والأنشطة</div><button class="st-add-btn" onclick="addSection('projects')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">📊 نتائج الطلاب</div><button class="st-add-btn" onclick="addSection('results')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">🖼️ معرض الصور</div><button class="st-add-btn" onclick="addSection('gallery')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">🔗 الروابط المهنية</div><button class="st-add-btn" onclick="addSection('links')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">✏️ قسم مخصص</div><button class="st-add-btn" onclick="addSection('custom')">+ إضافة قسم</button></div>
     </div>
     <div class="sidebar-pane" id="pane-design">
 
@@ -1972,321 +2088,10 @@ function restoreFromFile(e){
   reader.readAsText(file);
   e.target.value='';
 }
-// ══════════════════════════════════════════════════════
-// مساعدات بناء المحتوى القابل للتعديل
-// ══════════════════════════════════════════════════════
-function makeEditableList(items, icon='•'){
-  let wrap = document.createElement('div');
-  let ul = document.createElement('ul');
-  ul.className = 'editable-list';
-  items.forEach(txt => ul.appendChild(makeListItem(txt)));
-  wrap.appendChild(ul);
-  let addBtn = document.createElement('button');
-  addBtn.className = 'add-list-item-btn';
-  addBtn.textContent = '+ إضافة بند';
-  addBtn.onclick = () => { ul.appendChild(makeListItem('بند جديد...')); updatePageBreakLines(); };
-  wrap.appendChild(addBtn);
-  return wrap;
-}
-function makeListItem(txt){
-  let li = document.createElement('li');
-  li.contentEditable = 'true'; li.spellcheck = false; li.textContent = txt;
-  let del = document.createElement('button');
-  del.className = 'li-del'; del.textContent = '✕';
-  del.onclick = e => { e.stopPropagation(); li.remove(); updatePageBreakLines(); };
-  li.appendChild(del);
-  return li;
-}
-function makeSubTitle(txt){
-  let d = document.createElement('div');
-  d.className = 'section-sub-title'; d.contentEditable = 'true';
-  d.spellcheck = false; d.textContent = txt; return d;
-}
-function makeEditableCard(icon, title, fields){
-  // fields = [{label, value}]
-  let card = document.createElement('div');
-  card.className = 'card-item';
-  card.innerHTML = '<button class="card-remove" onclick="this.parentElement.remove()">✕ حذف</button>';
-  let iconArea = document.createElement('div');
-  iconArea.className = 'card-icon-area';
-  iconArea.textContent = icon;
-  iconArea.onclick = () => cycleIcon(iconArea);
-  let body = document.createElement('div');
-  body.className = 'card-content';
-  let titleEl = document.createElement('div');
-  titleEl.className = 'card-title-field';
-  titleEl.contentEditable = 'true'; titleEl.spellcheck = false; titleEl.textContent = title;
-  body.appendChild(titleEl);
-  fields.forEach(f => {
-    let row = document.createElement('div');
-    row.className = 'single-field';
-    row.style.cssText = 'margin-bottom:4px;';
-    let lbl = document.createElement('div');
-    lbl.className = 'single-field-label'; lbl.contentEditable = 'true'; lbl.textContent = f.label+':';
-    let val = document.createElement('div');
-    val.className = 'single-field-value'; val.contentEditable = 'true'; val.textContent = f.value;
-    let rm = document.createElement('button');
-    rm.className = 'single-field-remove'; rm.textContent = '✕';
-    rm.onclick = () => row.remove();
-    row.appendChild(lbl); row.appendChild(val); row.appendChild(rm);
-    body.appendChild(row);
-  });
-  card.appendChild(iconArea); card.appendChild(body);
-  return card;
-}
-function makeAddCardBtn(sectionEl, icon, title, fields){
-  let btn = document.createElement('button');
-  btn.className = 'sec-add-btn';
-  btn.textContent = '+ إضافة بطاقة';
-  btn.onclick = () => {
-    sectionEl.insertBefore(makeEditableCard(icon, title, fields), btn);
-    updatePageBreakLines();
-  };
-  return btn;
-}
-
-// ══════════════════════════════════════════════════════
-// بيانات الأقسام الجديدة + دالة الإنشاء
-// ══════════════════════════════════════════════════════
-function addNewSection(type){
-  let block = addSection('custom');
-  let titleSpan = block.querySelector('.section-header span[contenteditable]');
-  let contentEl = block.querySelector('.section-content');
-  contentEl.innerHTML = '';
-
-  // ── إضافة زر إضافة بطاقة في شريط الأقسام ──
-  let addBar = block.querySelector('.section-add-bar');
-
-  switch(type){
-
-    case 'supervision_received': {
-      if(titleSpan) titleSpan.textContent = '🔍 الإشراف التربوي المُستلَم';
-      contentEl.appendChild(makeSubTitle('📋 بيانات الزيارة الإشرافية'));
-      contentEl.appendChild(makeEditableCard('🔍','زيارة إشرافية',[
-        {label:'اسم المشرف', value:''},
-        {label:'تاريخ الزيارة', value:''},
-        {label:'نوع الزيارة', value:'مفاجئة / مبرمجة'},
-        {label:'درجة التقييم', value:''},
-        {label:'ملاحظات المشرف', value:''}
-      ]));
-      contentEl.appendChild(makeAddCardBtn(contentEl,'🔍','زيارة إشرافية',[
-        {label:'اسم المشرف',value:''},{label:'تاريخ الزيارة',value:''},{label:'نوع الزيارة',value:''},{label:'درجة التقييم',value:''},{label:'ملاحظات',value:''}
-      ]));
-      contentEl.appendChild(makeSubTitle('✅ نقاط القوة الملاحظة'));
-      contentEl.appendChild(makeEditableList(['تفاعل الطلاب مع الدرس','حسن إدارة الوقت']));
-      contentEl.appendChild(makeSubTitle('📝 توصيات المشرف'));
-      contentEl.appendChild(makeEditableList(['تنويع أساليب التقييم','توظيف التقنية أكثر']));
-      break;
-    }
-    case 'supervision_given': {
-      if(titleSpan) titleSpan.textContent = '👁️ الإشراف على المعلمين';
-      contentEl.appendChild(makeSubTitle('📋 سجل الزيارات الإشرافية'));
-      contentEl.appendChild(createTable(
-        ['اسم المعلم','المادة','التاريخ','نوع الزيارة','الدرجة','ملاحظات'],
-        [['','','','','',''],['','','','','','']]
-      ));
-      contentEl.appendChild(makeSubTitle('📊 ملخص الإشراف'));
-      contentEl.appendChild(makeEditableList(['عدد الزيارات المنفذة: ','متوسط درجات المعلمين: ','أبرز نقاط القوة: ']));
-      break;
-    }
-    case 'committees': {
-      if(titleSpan) titleSpan.textContent = '📋 اللجان المدرسية';
-      contentEl.appendChild(makeEditableCard('📋','لجنة الامتحانات',[
-        {label:'الدور', value:'رئيس اللجنة / عضو'},
-        {label:'الفصل', value:'الأول / الثاني'},
-        {label:'المهام', value:'إعداد الجداول والأسئلة'},
-        {label:'الإنجاز', value:''}
-      ]));
-      contentEl.appendChild(makeEditableCard('🏆','لجنة النشاط المدرسي',[
-        {label:'الدور', value:''},
-        {label:'الفعاليات المنفذة', value:''},
-        {label:'عدد الطلاب', value:''},
-        {label:'الإنجاز', value:''}
-      ]));
-      contentEl.appendChild(makeAddCardBtn(contentEl,'📋','لجنة جديدة',[
-        {label:'اسم اللجنة',value:''},{label:'الدور',value:''},{label:'المهام',value:''},{label:'الإنجاز',value:''}
-      ]));
-      break;
-    }
-    case 'duty': {
-      if(titleSpan) titleSpan.textContent = '📅 المناوبة والانتظار';
-      contentEl.appendChild(makeSubTitle('📋 جدول المناوبة الأسبوعي'));
-      contentEl.appendChild(createTable(
-        ['اليوم','الفترة','الموقع','الملاحظات'],
-        [['الأحد','الأولى','الباحة',''],['الثلاثاء','الثانية','المدخل',''],['الخميس','الأولى','الباحة','']]
-      ));
-      contentEl.appendChild(makeSubTitle('✅ إنجازات المناوبة'));
-      contentEl.appendChild(makeEditableList(['انتظام في الحضور','متابعة سلوك الطلاب','حل المشكلات فور وقوعها']));
-      break;
-    }
-    case 'training': {
-      if(titleSpan) titleSpan.textContent = '🎓 الدورات والتدريب';
-      ['دورة تقنية المعلومات في التعليم','دورة استراتيجيات التدريس الحديثة'].forEach((name,i) => {
-        contentEl.appendChild(makeEditableCard('🎓', name,[
-          {label:'الجهة المانحة', value:'وزارة التربية والتعليم'},
-          {label:'المدة', value:'٣ أيام'},
-          {label:'التاريخ', value:''},
-          {label:'نوع الشهادة', value:'حضور / اجتياز'},
-          {label:'رقم الشهادة', value:''}
-        ]));
-      });
-      contentEl.appendChild(makeAddCardBtn(contentEl,'🎓','دورة تدريبية',[
-        {label:'اسم الدورة',value:''},{label:'الجهة المانحة',value:''},{label:'المدة',value:''},{label:'التاريخ',value:''},{label:'نوع الشهادة',value:''}
-      ]));
-      break;
-    }
-    case 'plc': {
-      if(titleSpan) titleSpan.textContent = '🤝 مجتمعات التعلم المهنية';
-      contentEl.appendChild(makeSubTitle('📅 سجل الاجتماعات'));
-      contentEl.appendChild(createTable(
-        ['التاريخ','موضوع الاجتماع','المشاركون','المخرجات'],
-        [['','','',''],['','','','']]
-      ));
-      contentEl.appendChild(makeSubTitle('🎯 الدروس التطبيقية'));
-      contentEl.appendChild(makeEditableCard('🎯','درس تطبيقي',[
-        {label:'المادة', value:''}, {label:'الصف', value:''}, {label:'التاريخ', value:''},
-        {label:'الحاضرون', value:''}, {label:'التغذية الراجعة', value:''}
-      ]));
-      contentEl.appendChild(makeAddCardBtn(contentEl,'🎯','درس تطبيقي',[
-        {label:'المادة',value:''},{label:'الصف',value:''},{label:'التاريخ',value:''},{label:'التغذية الراجعة',value:''}
-      ]));
-      contentEl.appendChild(makeSubTitle('📖 بحث الدرس'));
-      contentEl.appendChild(makeEditableList(['عنوان البحث: ','المشاركون: ','النتائج: ','التوصيات: ']));
-      break;
-    }
-    case 'research': {
-      if(titleSpan) titleSpan.textContent = '🔬 البحث التربوي';
-      contentEl.appendChild(makeEditableCard('🔬','بحث إجرائي',[
-        {label:'عنوان البحث', value:''},
-        {label:'نوع البحث', value:'إجرائي / تطبيقي'},
-        {label:'تاريخ الإنجاز', value:''},
-        {label:'مكان العرض/النشر', value:''},
-        {label:'ملخص النتائج', value:''}
-      ]));
-      contentEl.appendChild(makeAddCardBtn(contentEl,'🔬','بحث تربوي',[
-        {label:'عنوان البحث',value:''},{label:'نوع البحث',value:''},{label:'تاريخ الإنجاز',value:''},{label:'النتائج',value:''}
-      ]));
-      break;
-    }
-    case 'activities': {
-      if(titleSpan) titleSpan.textContent = '⚽ الأنشطة اللاصفية';
-      ['رحلة تعليمية','مسابقة علمية','احتفالية وطنية'].forEach(name => {
-        contentEl.appendChild(makeEditableCard('⚽', name,[
-          {label:'التاريخ', value:''}, {label:'المكان', value:''},
-          {label:'عدد المشاركين', value:''}, {label:'دور المعلم', value:''},
-          {label:'الإنجاز', value:''}
-        ]));
-      });
-      contentEl.appendChild(makeAddCardBtn(contentEl,'⚽','نشاط لاصفي',[
-        {label:'النشاط',value:''},{label:'التاريخ',value:''},{label:'المكان',value:''},{label:'عدد المشاركين',value:''},{label:'الإنجاز',value:''}
-      ]));
-      break;
-    }
-    case 'community': {
-      if(titleSpan) titleSpan.textContent = '🌍 خدمة المجتمع';
-      contentEl.appendChild(makeEditableCard('🌍','مبادرة مجتمعية',[
-        {label:'اسم المبادرة', value:''}, {label:'الجهة المنفذة', value:''},
-        {label:'تاريخ التنفيذ', value:''}, {label:'عدد المستفيدين', value:''},
-        {label:'الأثر', value:''}
-      ]));
-      contentEl.appendChild(makeAddCardBtn(contentEl,'🌍','مبادرة/خدمة',[
-        {label:'اسم المبادرة',value:''},{label:'الجهة',value:''},{label:'التاريخ',value:''},{label:'الأثر',value:''}
-      ]));
-      break;
-    }
-    case 'student_awards': {
-      if(titleSpan) titleSpan.textContent = '🏅 إنجازات الطلاب';
-      contentEl.appendChild(makeSubTitle('🥇 جوائز ومسابقات'));
-      contentEl.appendChild(createTable(
-        ['اسم الطالب','المسابقة','المستوى','المركز','التاريخ'],
-        [['','','محلي / إقليمي','',''],['','','','','']]
-      ));
-      contentEl.appendChild(makeSubTitle('📈 تحسن المستوى الأكاديمي'));
-      contentEl.appendChild(makeEditableList(['طالب تحسّن مستواه من ضعيف إلى متوسط: ','طالب متميز حافظ على تفوقه: ']));
-      break;
-    }
-    case 'planning': {
-      if(titleSpan) titleSpan.textContent = '📆 التخطيط الدراسي';
-      contentEl.appendChild(makeSubTitle('📚 توزيع المنهج'));
-      contentEl.appendChild(createTable(
-        ['الوحدة','عدد الحصص','الفترة الزمنية','الملاحظات'],
-        [['الوحدة الأولى','','',''],['الوحدة الثانية','','',''],['الوحدة الثالثة','','','']]
-      ));
-      contentEl.appendChild(makeSubTitle('🗒️ ملاحظات التخطيط'));
-      contentEl.appendChild(makeEditableList(['التزمت بتوزيع المنهج على مدار الفصل','تم تعديل التوزيع بسبب: ']));
-      break;
-    }
-    case 'remedial': {
-      if(titleSpan) titleSpan.textContent = '💊 الخطط العلاجية والإثرائية';
-      contentEl.appendChild(makeSubTitle('🔴 الخطط العلاجية'));
-      contentEl.appendChild(createTable(
-        ['اسم الطالب','المادة','نقطة الضعف','الخطة العلاجية','نتيجة التطبيق'],
-        [['','','','',''],['','','','','']]
-      ));
-      contentEl.appendChild(makeSubTitle('🟢 الخطط الإثرائية'));
-      contentEl.appendChild(createTable(
-        ['اسم الطالب','المادة','نقطة التميز','الخطة الإثرائية','الإنجاز'],
-        [['','','','',''],['','','','','']]
-      ));
-      break;
-    }
-    case 'parents': {
-      if(titleSpan) titleSpan.textContent = '👪 التواصل مع أولياء الأمور';
-      contentEl.appendChild(makeSubTitle('📞 سجل التواصل'));
-      contentEl.appendChild(createTable(
-        ['التاريخ','اسم ولي الأمر','طريقة التواصل','الموضوع','النتيجة'],
-        [['','','هاتف / حضوري','',''],['','','','','']]
-      ));
-      contentEl.appendChild(makeSubTitle('👥 اجتماعات أولياء الأمور'));
-      contentEl.appendChild(makeEditableCard('👥','اجتماع أولياء الأمور',[
-        {label:'التاريخ', value:''}, {label:'عدد الحاضرين', value:''},
-        {label:'أبرز الموضوعات', value:''}, {label:'القرارات المتخذة', value:''}
-      ]));
-      contentEl.appendChild(makeAddCardBtn(contentEl,'👥','اجتماع',[
-        {label:'التاريخ',value:''},{label:'عدد الحاضرين',value:''},{label:'الموضوعات',value:''}
-      ]));
-      break;
-    }
-    case 'technology': {
-      if(titleSpan) titleSpan.textContent = '💻 التقنية في التعليم';
-      ['منصة مدرستي','تطبيق تعليمي','عرض تقديمي تفاعلي'].forEach(name => {
-        contentEl.appendChild(makeEditableCard('💻', name,[
-          {label:'اسم الأداة/المنصة', value: name},
-          {label:'طريقة التوظيف', value:''},
-          {label:'الصف/المادة', value:''},
-          {label:'الأثر على التعلم', value:''}
-        ]));
-      });
-      contentEl.appendChild(makeAddCardBtn(contentEl,'💻','أداة تقنية',[
-        {label:'اسم الأداة',value:''},{label:'طريقة التوظيف',value:''},{label:'الصف/المادة',value:''},{label:'الأثر',value:''}
-      ]));
-      break;
-    }
-    case 'innovation': {
-      if(titleSpan) titleSpan.textContent = '🚀 الابتكار التربوي';
-      contentEl.appendChild(makeEditableCard('🚀','وسيلة تعليمية مبتكرة',[
-        {label:'اسم الوسيلة/الفكرة', value:''},
-        {label:'الهدف منها', value:''},
-        {label:'المادة/الصف', value:''},
-        {label:'طريقة التنفيذ', value:''},
-        {label:'الأثر والنتيجة', value:''}
-      ]));
-      contentEl.appendChild(makeAddCardBtn(contentEl,'🚀','ابتكار / فكرة',[
-        {label:'اسم الفكرة',value:''},{label:'الهدف',value:''},{label:'طريقة التنفيذ',value:''},{label:'النتيجة',value:''}
-      ]));
-      contentEl.appendChild(makeSubTitle('🌟 جوائز الابتكار'));
-      contentEl.appendChild(makeEditableList(['جائزة المعلم المبتكر: ','مشاركة في معرض الإبداع: ']));
-      break;
-    }
-  }
-  updatePageBreakLines();
-  toast('✅ تمت إضافة القسم');
-}
-
 function confirmReset(){ document.getElementById('reset-modal').classList.add('active'); }
 function doReset(){ closeModal('reset-modal'); setTimeout(()=>location.reload(), 200); }
 function dropBetween(e,dropEl,pos){ e.preventDefault(); e.stopPropagation(); dropEl.classList.remove('drag-over'); if(!draggedElementType) return; let section=dropEl.closest('.page-section'); if(section){ let contentEl=section.querySelector('.section-content'); if(contentEl) addElementToSection(contentEl,draggedElementType); } draggedElementType=null; }
-window.addEventListener('DOMContentLoaded',()=>{ reinitAllSortables(); updatePageBreakLines(); });
+window.addEventListener('DOMContentLoaded',()=>{ reinitAllSortables(); updatePageBreakLines(); initMobileOverlay(); });
 // إلغاء تحديد الصور عند النقر في أي مكان آخر
 document.addEventListener('click',()=>{
   document.querySelectorAll('.img-block-item.selected').forEach(el=>el.classList.remove('selected'));
@@ -2294,6 +2099,50 @@ document.addEventListener('click',()=>{
 const resizeObs=new ResizeObserver(()=>updatePageBreakLines()); resizeObs.observe(document.getElementById('sections-container')); resizeObs.observe(document.getElementById('page-cover'));
 const mutationObs=new MutationObserver(()=>{ let hasContent=document.getElementById('sections-container').children.length>0; document.getElementById('drop-hint').classList.toggle('hidden',hasContent); updatePageBreakLines(); reinitAllSortables(); }); mutationObs.observe(document.getElementById('sections-container'),{childList:true,subtree:true});
 document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('active'); }));
+// ═══════════════════════════════════════════════
+// وظائف الموبايل
+// ═══════════════════════════════════════════════
+function isMobile(){ return window.innerWidth <= 768; }
+
+function initMobileOverlay(){
+  if(isMobile()){
+    let dismissed = sessionStorage.getItem('mob-dismissed');
+    if(!dismissed){
+      document.getElementById('mobile-overlay').classList.add('active');
+    }
+  }
+}
+
+function dismissMobileOverlay(){
+  document.getElementById('mobile-overlay').classList.remove('active');
+  sessionStorage.setItem('mob-dismissed','1');
+  // أظهر الـ sidebar toggle
+  document.getElementById('mob-sidebar-toggle').style.display = 'flex';
+}
+
+function toggleMobileSidebar(){
+  let sidebar = document.getElementById('sidebar');
+  let bg = document.getElementById('mob-overlay-bg');
+  sidebar.classList.toggle('mob-open');
+  bg.classList.toggle('active');
+}
+
+function closeMobileSidebar(){
+  document.getElementById('sidebar').classList.remove('mob-open');
+  document.getElementById('mob-overlay-bg').classList.remove('active');
+}
+
+// أغلق الشريط تلقائياً عند إضافة قسم على موبايل
+const _origAddSection = addSection;
+
+window.addEventListener('resize', ()=>{
+  if(!isMobile()){
+    document.getElementById('mobile-overlay').classList.remove('active');
+    document.getElementById('sidebar').classList.remove('mob-open');
+    document.getElementById('mob-overlay-bg').classList.remove('active');
+  }
+});
+
 </script>
 </body>
 </html>
