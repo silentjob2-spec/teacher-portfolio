@@ -2749,25 +2749,35 @@ function dropBetween(e,dropEl,pos){ e.preventDefault(); e.stopPropagation(); dro
 // عداد الزوار — counterapi.dev
 // ═══════════════════════════════════════════
 function initVisitorCounter(){
-  // namespace فريد للموقع
-  let ns = 'teacher-portfolio-iyadkhadr';
-  let key = 'visits';
-  // سجّل زيارة جديدة واحصل على العدد
-  fetch('https://api.counterapi.dev/v1/' + ns + '/' + key + '/up', {
-    method: 'GET',
-    headers: { 'Accept': 'application/json' }
-  })
-  .then(r => r.json())
-  .then(data => {
-    let count = data.count || data.value || '—';
-    let el = document.getElementById('vc-num');
-    if(el) el.textContent = Number(count).toLocaleString('ar-EG');
-  })
-  .catch(() => {
-    // fallback: hits.sh badge
-    let el = document.getElementById('vc-num');
-    if(el) el.innerHTML = '<img src="https://hits.sh/silentjob2-spec.github.io/teacher-portfolio.svg?style=flat" style="height:18px;vertical-align:middle;" />';
-  });
+  let el = document.getElementById('vc-num');
+  if(!el) return;
+  // أنشئ صورة hits.sh — تعمل كصورة مباشرة بدون fetch
+  let img = new Image();
+  img.onload = function(){
+    // استخرج الرقم من عرض الصورة (تقريباً) — أو اعرضها مباشرة
+    el.innerHTML = '';
+    // اعرض الرقم من خلال canvas لاستخراجه من SVG
+    fetch('https://hits.sh/silentjob2-spec.github.io/teacher-portfolio.svg')
+      .then(r => r.text())
+      .then(svg => {
+        // استخرج الرقم من نص SVG
+        let match = svg.match(/>(\d[\d,]*)<\/text>/g);
+        if(match && match.length){
+          let nums = match.map(m => m.replace(/<[^>]+>/g,'').replace(',',''));
+          let count = nums[nums.length-1];
+          el.textContent = Number(count).toLocaleString('ar-EG');
+        }
+      })
+      .catch(()=>{
+        // fallback: اعرض الصورة مباشرة
+        let i = document.createElement('img');
+        i.src = img.src;
+        i.style.cssText = 'height:20px;vertical-align:middle;border-radius:4px;';
+        el.appendChild(i);
+      });
+  };
+  img.onerror = () => { el.textContent = '—'; };
+  img.src = 'https://hits.sh/silentjob2-spec.github.io/teacher-portfolio.svg?style=flat&color=1e3a8a&labelColor=dbeafe';
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
