@@ -1598,7 +1598,7 @@ a.toc-entry:hover { filter: brightness(0.94); }
   <button class="tb-btn tb-btn-danger" onclick="confirmReset()">🗑️ مسح الكل</button>
   <input type="file" id="restore-file-input" accept=".json" style="display:none" onchange="restoreFromFile(event)">
   <div class="visitor-counter" id="visitor-counter" title="عدد زوار الموقع">
-    👁️ الزوار: <span class="vc-count" id="vc-num">…</span>
+    👁️ <span id="vc-num">…</span>
   </div>
   <input type="file" id="cover-img-input" accept="image/*" style="display:none" onchange="setCoverBackground(event)">
   <input type="file" id="pdf-cover-input" accept="image/*" style="display:none" onchange="setPdfCover(event)">
@@ -2751,33 +2751,8 @@ function dropBetween(e,dropEl,pos){ e.preventDefault(); e.stopPropagation(); dro
 function initVisitorCounter(){
   let el = document.getElementById('vc-num');
   if(!el) return;
-  // أنشئ صورة hits.sh — تعمل كصورة مباشرة بدون fetch
-  let img = new Image();
-  img.onload = function(){
-    // استخرج الرقم من عرض الصورة (تقريباً) — أو اعرضها مباشرة
-    el.innerHTML = '';
-    // اعرض الرقم من خلال canvas لاستخراجه من SVG
-    fetch('https://hits.sh/silentjob2-spec.github.io/teacher-portfolio.svg')
-      .then(r => r.text())
-      .then(svg => {
-        // استخرج الرقم من نص SVG
-        let match = svg.match(/>(\d[\d,]*)<\/text>/g);
-        if(match && match.length){
-          let nums = match.map(m => m.replace(/<[^>]+>/g,'').replace(',',''));
-          let count = nums[nums.length-1];
-          el.textContent = Number(count).toLocaleString('ar-EG');
-        }
-      })
-      .catch(()=>{
-        // fallback: اعرض الصورة مباشرة
-        let i = document.createElement('img');
-        i.src = img.src;
-        i.style.cssText = 'height:20px;vertical-align:middle;border-radius:4px;';
-        el.appendChild(i);
-      });
-  };
-  img.onerror = () => { el.textContent = '—'; };
-  img.src = 'https://hits.sh/silentjob2-spec.github.io/teacher-portfolio.svg?style=flat&color=1e3a8a&labelColor=dbeafe';
+  // أبسط طريقة مضمونة مع GitHub Pages — صورة مباشرة بدون fetch
+  el.innerHTML = '<img src="https://hits.sh/silentjob2-spec.github.io/teacher-portfolio.svg?style=flat&color=1e3a8a&labelColor=e0f2fe" style="height:22px;vertical-align:middle;border-radius:4px;" alt="زوار" />';
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
