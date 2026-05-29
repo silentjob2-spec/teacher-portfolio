@@ -1597,9 +1597,7 @@ a.toc-entry:hover { filter: brightness(0.94); }
   <span class="tb-sep"></span>
   <button class="tb-btn tb-btn-danger" onclick="confirmReset()">🗑️ مسح الكل</button>
   <input type="file" id="restore-file-input" accept=".json" style="display:none" onchange="restoreFromFile(event)">
-  <div class="visitor-counter" id="visitor-counter" title="عدد زوار الموقع">
-    👁️ <span id="vc-num">…</span>
-  </div>
+
   <input type="file" id="cover-img-input" accept="image/*" style="display:none" onchange="setCoverBackground(event)">
   <input type="file" id="pdf-cover-input" accept="image/*" style="display:none" onchange="setPdfCover(event)">
 </div>
@@ -1607,11 +1605,11 @@ a.toc-entry:hover { filter: brightness(0.94); }
 <div id="workspace">
   <div id="sidebar">
     <div class="sidebar-tabs">
-      <button class="sidebar-tab active" onclick="switchTab('elements')" id="tab-elements">🧩 عناصر</button>
-      <button class="sidebar-tab" onclick="switchTab('sections')" id="tab-sections">📑 أقسام</button>
+      <button class="sidebar-tab active" onclick="switchTab('sections')" id="tab-sections">📑 أقسام</button>
+      <button class="sidebar-tab" onclick="switchTab('elements')" id="tab-elements">🧩 عناصر</button>
       <button class="sidebar-tab" onclick="switchTab('design')" id="tab-design">🎨 تصميم</button>
     </div>
-    <div class="sidebar-pane active" id="pane-elements">
+    <div class="sidebar-pane" id="pane-elements">
       <div class="sb-section-title">➕ أضف إلى آخر قسم</div>
       <div class="element-card" draggable="true" ondragstart="dragEl(event,'text')" onclick="choosePositionAndAddElement('text')"><span class="ec-icon">📝</span> إضافة نص / فقرة</div>
       <div class="element-card" draggable="true" ondragstart="dragEl(event,'card')" onclick="choosePositionAndAddElement('card')"><span class="ec-icon">🃏</span> إضافة كرت إنجاز</div>
@@ -1624,7 +1622,7 @@ a.toc-entry:hover { filter: brightness(0.94); }
       <div class="sb-section-title">📄 ملفات PDF</div>
       <div class="element-card pdf-upload-card" draggable="true" ondragstart="dragEl(event,'pdf')" onclick="choosePositionAndAddElement('pdf')"><span class="ec-icon">📄</span> رفع ملف PDF (كل الصفحات)</div>
     </div>
-    <div class="sidebar-pane" id="pane-sections">
+    <div class="sidebar-pane active" id="pane-sections">
       <div class="sb-section-title">📑 إضافة قسم جاهز</div>
       <div class="section-template" style="background:linear-gradient(135deg,#fefce8,#f0fdf4);border-color:#fcd34d;">
         <div class="st-row">
