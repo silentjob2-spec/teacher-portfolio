@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- ══ معلومات المشاركة (واتساب، تويتر، فيسبوك) ══ -->
-  <meta name="description" content="صفحة مخصصة لإنشاء ملف إنجاز المعلم">
+  <meta name="description" content="صفحة مخصصة لإنشاء ملف إنجاز المعلم — الأستاذ إياد خضر، مدرسة ابن تيمية الثانوية الشاملة للبنين">
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
@@ -86,6 +86,28 @@ body {
 }
 
 .tb-sep { width: 1px; height: 30px; background: #e2e8f0; margin: 0 4px; flex-shrink: 0; }
+.visitor-counter {
+  margin-right: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg,#f0fdf4,#eff6ff);
+  border: 1.5px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #166534;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.vc-count {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--primary);
+  min-width: 24px;
+  text-align: center;
+}
 
 .tb-btn {
   display: inline-flex;
@@ -741,6 +763,181 @@ body {
 }
 
 .table-wrap { overflow-x: auto; margin-top: 4px; }
+
+/* ══════════════════════════════════════
+   قسم الفهرس
+══════════════════════════════════════ */
+.toc-wrap {
+  width: 100%;
+  direction: rtl;
+}
+.toc-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  padding: 14px 20px;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 0;
+  gap: 10px;
+}
+.toc-main-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.toc-decorline {
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+  margin-bottom: 8px;
+}
+.toc-body {
+  padding: 10px 6px 14px;
+}
+.toc-entry {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px 10px;
+  border-radius: 7px;
+  margin-bottom: 3px;
+  transition: background 0.12s;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+/* رابط يعمل في PDF */
+a.toc-entry {
+  cursor: pointer;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+a.toc-entry:hover { filter: brightness(0.94); }
+.toc-entry.toc-section-entry {
+  background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+  border-right: 4px solid var(--primary);
+}
+.toc-entry.toc-card-entry {
+  background: #f8fafc;
+  border-right: 3px solid var(--accent);
+  padding-right: 22px;
+  font-size: 0.83rem;
+}
+.toc-entry-icon {
+  font-size: 1rem;
+  margin-left: 8px;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+}
+.toc-entry-name {
+  flex: 1;
+  font-weight: 800;
+  color: #1e293b;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.toc-card-entry .toc-entry-name {
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.8rem;
+}
+.toc-dots {
+  flex: 1;
+  border-bottom: 2px dotted #cbd5e1;
+  margin: 0 10px;
+  min-width: 20px;
+  position: relative;
+  top: -2px;
+}
+.toc-card-entry .toc-dots { border-color: #e2e8f0; }
+.toc-page-num {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: white;
+  background: var(--primary);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: 'Cairo', sans-serif;
+}
+.toc-card-entry .toc-page-num {
+  background: var(--accent);
+  width: 22px; height: 22px;
+  font-size: 0.72rem;
+}
+.toc-refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 10px auto 0;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 20px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.toc-refresh-btn:hover { opacity: 0.88; }
+.toc-note {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  text-align: center;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* نافذة تحديد الموضع الموحدة */
+#position-modal .modal-box,
+#toc-position-modal .modal-box { max-width: 460px; }
+.pos-modal-tabs { display:flex; gap:6px; margin-bottom:12px; border-bottom:2px solid #e2e8f0; padding-bottom:8px; }
+.pos-tab-btn { flex:1; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:7px 7px 0 0; padding:7px 8px; font-family:'Cairo',sans-serif; font-size:0.78rem; font-weight:700; color:#64748b; cursor:pointer; transition:all 0.15s; }
+.pos-tab-btn.active { background:var(--primary); color:white; border-color:var(--primary); }
+.pos-options-list, .toc-pos-options { display:flex; flex-direction:column; gap:6px; max-height:280px; overflow-y:auto; padding:2px; }
+.pos-option-btn, .toc-pos-btn { background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:8px; padding:10px 14px; font-family:'Cairo',sans-serif; font-size:0.82rem; font-weight:700; color:#334155; cursor:pointer; text-align:right; transition:all 0.15s; display:flex; align-items:center; gap:8px; width:100%; }
+.pos-option-btn:hover, .toc-pos-btn:hover { border-color:var(--primary); background:#eff6ff; color:var(--primary); }
+.pos-option-btn.selected, .toc-pos-btn.selected { border-color:var(--primary); background:#eff6ff; color:var(--primary); }
+.pos-option-btn .pos-section-name { flex:1; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pos-option-btn .pos-badge { font-size:0.65rem; background:var(--primary); color:white; border-radius:4px; padding:1px 6px; flex-shrink:0; }
+.toc-pos-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 14px 0;
+}
+.toc-pos-btn {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  text-align: right;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.toc-pos-btn:hover { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
+.toc-pos-btn.selected { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
+@media print {
+  .toc-refresh-btn, .toc-note { display: none !important; }
+}
 .content-table { width: 100%; border-collapse: collapse; text-align: right; font-size: 0.85rem; }
 .content-table th, .content-table td { padding: 8px 10px; border: 1px solid #e2e8f0; }
 .content-table th { background: #f1f5f9; color: var(--primary); font-weight: 800; }
@@ -808,6 +1005,46 @@ body {
   transition: all 0.15s;
 }
 .sec-add-btn:hover { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
+
+/* ── زر إضافة عنصر تحت كل عنصر ── */
+.elem-insert-bar {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 2px;
+  padding: 0;
+}
+.elem-insert-btn {
+  background: none;
+  border: none;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #bfdbfe;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  padding: 3px 10px;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+  letter-spacing: 0.2px;
+}
+.elem-insert-btn:hover {
+  color: var(--primary);
+  background: #eff6ff;
+}
+
+/* نافذة اختيار نوع العنصر */
+.elem-type-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin: 14px 0;
+}
+.elem-type-card {
+  background:#f8fafc; border:1.5px solid #e2e8f0;
+  border-radius:10px; padding:12px 6px; text-align:center;
+  cursor:pointer; transition:all 0.15s; font-family:'Cairo',sans-serif;
+}
+.elem-type-card:hover { border-color:var(--primary); background:#eff6ff; transform:translateY(-2px); box-shadow:0 4px 12px rgba(30,58,138,0.12); }
+.elem-type-card.selected { border-color:var(--primary); background:#dbeafe; }
+.etc-icon { font-size:1.4rem; display:block; margin-bottom:4px; }
+.etc-name { font-size:0.68rem; font-weight:800; color:#334155; }
+@media print { .elem-insert-bar, .elem-insert-btn { display:none !important; } }
 
 .between-drop {
   height: 6px;
@@ -1065,6 +1302,7 @@ body {
   #print-content .single-field-remove, #print-content .between-drop, #print-content .drag-icon,
   #print-content .img-resize-handle, #print-content .img-size-badge,
   #print-content .img-toolbar,
+  #print-content .elem-insert-bar,
   #print-content .spacer-controls, #print-content .spacer-drag-bar { display: none !important; }
   #print-content .section-hidden { display: none; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -1359,6 +1597,9 @@ body {
   <span class="tb-sep"></span>
   <button class="tb-btn tb-btn-danger" onclick="confirmReset()">🗑️ مسح الكل</button>
   <input type="file" id="restore-file-input" accept=".json" style="display:none" onchange="restoreFromFile(event)">
+  <div class="visitor-counter" id="visitor-counter" title="عدد زوار الموقع">
+    👁️ الزوار: <span class="vc-count" id="vc-num">…</span>
+  </div>
   <input type="file" id="cover-img-input" accept="image/*" style="display:none" onchange="setCoverBackground(event)">
   <input type="file" id="pdf-cover-input" accept="image/*" style="display:none" onchange="setPdfCover(event)">
 </div>
@@ -1372,27 +1613,36 @@ body {
     </div>
     <div class="sidebar-pane active" id="pane-elements">
       <div class="sb-section-title">➕ أضف إلى آخر قسم</div>
-      <div class="element-card" draggable="true" ondragstart="dragEl(event,'text')"><span class="ec-icon">📝</span> إضافة نص / فقرة</div>
-      <div class="element-card" draggable="true" ondragstart="dragEl(event,'card')"><span class="ec-icon">🃏</span> إضافة كرت إنجاز</div>
-      <div class="element-card" draggable="true" ondragstart="dragEl(event,'image')"><span class="ec-icon">🖼️</span> إضافة صورة</div>
-      <div class="element-card" draggable="true" ondragstart="dragEl(event,'table')"><span class="ec-icon">📊</span> إضافة جدول</div>
-      <div class="element-card" draggable="true" ondragstart="dragEl(event,'field')"><span class="ec-icon">🔹</span> إضافة حقل</div>
-      <div class="element-card" draggable="true" ondragstart="dragEl(event,'link')"><span class="ec-icon">🔗</span> إضافة رابط</div>
-      <div class="element-card" draggable="true" ondragstart="dragEl(event,'infogrid')"><span class="ec-icon">📋</span> شبكة معلومات</div>
-      <div class="element-card" draggable="true" ondragstart="dragEl(event,'spacer')"><span class="ec-icon">↕️</span> مسافة (قابلة للسحب)</div>
+      <div class="element-card" draggable="true" ondragstart="dragEl(event,'text')" onclick="choosePositionAndAddElement('text')"><span class="ec-icon">📝</span> إضافة نص / فقرة</div>
+      <div class="element-card" draggable="true" ondragstart="dragEl(event,'card')" onclick="choosePositionAndAddElement('card')"><span class="ec-icon">🃏</span> إضافة كرت إنجاز</div>
+      <div class="element-card" draggable="true" ondragstart="dragEl(event,'image')" onclick="choosePositionAndAddElement('image')"><span class="ec-icon">🖼️</span> إضافة صورة</div>
+      <div class="element-card" draggable="true" ondragstart="dragEl(event,'table')" onclick="choosePositionAndAddElement('table')"><span class="ec-icon">📊</span> إضافة جدول</div>
+      <div class="element-card" draggable="true" ondragstart="dragEl(event,'field')" onclick="choosePositionAndAddElement('field')"><span class="ec-icon">🔹</span> إضافة حقل</div>
+      <div class="element-card" draggable="true" ondragstart="dragEl(event,'link')" onclick="choosePositionAndAddElement('link')"><span class="ec-icon">🔗</span> إضافة رابط</div>
+      <div class="element-card" draggable="true" ondragstart="dragEl(event,'infogrid')" onclick="choosePositionAndAddElement('infogrid')"><span class="ec-icon">📋</span> شبكة معلومات</div>
+      <div class="element-card" draggable="true" ondragstart="dragEl(event,'spacer')" onclick="choosePositionAndAddElement('spacer')"><span class="ec-icon">↕️</span> مسافة (قابلة للسحب)</div>
       <div class="sb-section-title">📄 ملفات PDF</div>
-      <div class="element-card pdf-upload-card" draggable="true" ondragstart="dragEl(event,'pdf')"><span class="ec-icon">📄</span> رفع ملف PDF (كل الصفحات)</div>
+      <div class="element-card pdf-upload-card" draggable="true" ondragstart="dragEl(event,'pdf')" onclick="choosePositionAndAddElement('pdf')"><span class="ec-icon">📄</span> رفع ملف PDF (كل الصفحات)</div>
     </div>
     <div class="sidebar-pane" id="pane-sections">
       <div class="sb-section-title">📑 إضافة قسم جاهز</div>
-      <div class="section-template"><div class="st-name">📌 المعلومات الشخصية</div><button class="st-add-btn" onclick="addSection('personal')">+ إضافة القسم</button></div>
-      <div class="section-template"><div class="st-name">🎯 الأهداف والرؤية</div><button class="st-add-btn" onclick="addSection('goals')">+ إضافة القسم</button></div>
-      <div class="section-template"><div class="st-name">🏆 الإنجازات والشهادات</div><button class="st-add-btn" onclick="addSection('achievements')">+ إضافة القسم</button></div>
-      <div class="section-template"><div class="st-name">💡 المشاريع والأنشطة</div><button class="st-add-btn" onclick="addSection('projects')">+ إضافة القسم</button></div>
-      <div class="section-template"><div class="st-name">📊 نتائج الطلاب</div><button class="st-add-btn" onclick="addSection('results')">+ إضافة القسم</button></div>
-      <div class="section-template"><div class="st-name">🖼️ معرض الصور</div><button class="st-add-btn" onclick="addSection('gallery')">+ إضافة القسم</button></div>
-      <div class="section-template"><div class="st-name">🔗 الروابط المهنية</div><button class="st-add-btn" onclick="addSection('links')">+ إضافة القسم</button></div>
-      <div class="section-template"><div class="st-name">✏️ قسم مخصص</div><button class="st-add-btn" onclick="addSection('custom')">+ إضافة قسم</button></div>
+      <div class="section-template" style="background:linear-gradient(135deg,#fefce8,#f0fdf4);border-color:#fcd34d;">
+        <div class="st-row">
+          <div>
+            <div class="st-name" style="color:#92400e;">📑 فهرس المحتوى</div>
+            <div class="st-desc">يُنشئ فهرساً تلقائياً لكل الأقسام</div>
+          </div>
+          <button class="st-add-btn" style="background:#d97706;" onclick="openTocPositionModal()">+ إضافة</button>
+        </div>
+      </div>
+      <div class="section-template"><div class="st-name">📌 المعلومات الشخصية</div><button class="st-add-btn" onclick="choosePositionAndAddSection('personal')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">🎯 الأهداف والرؤية</div><button class="st-add-btn" onclick="choosePositionAndAddSection('goals')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">🏆 الإنجازات والشهادات</div><button class="st-add-btn" onclick="choosePositionAndAddSection('achievements')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">💡 المشاريع والأنشطة</div><button class="st-add-btn" onclick="choosePositionAndAddSection('projects')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">📊 نتائج الطلاب</div><button class="st-add-btn" onclick="choosePositionAndAddSection('results')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">🖼️ معرض الصور</div><button class="st-add-btn" onclick="choosePositionAndAddSection('gallery')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">🔗 الروابط المهنية</div><button class="st-add-btn" onclick="choosePositionAndAddSection('links')">+ إضافة القسم</button></div>
+      <div class="section-template"><div class="st-name">✏️ قسم مخصص</div><button class="st-add-btn" onclick="choosePositionAndAddSection('custom')">+ إضافة قسم</button></div>
     </div>
     <div class="sidebar-pane" id="pane-design">
 
@@ -1572,7 +1822,7 @@ function addSection(type, position='end', refNode=null){
   else if(type==='results') contentEl.appendChild(createTable(['المادة','الفصل الأول','الثاني','المعدل'],[['اللغة العربية','75%','80%','77.5%'],['الرياضيات','70%','78%','74%']]));
   else if(type==='gallery'){ let w=document.createElement('div'); w.className='img-block-wrap'; w.innerHTML=`<div class="img-placeholder" style="text-align:center;width:100%;padding:8px 0;"><button onclick="triggerImageUpload(this.closest('.section-content'))" style="background:var(--primary);color:white;border:none;border-radius:6px;padding:7px 16px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;">🖼️ رفع صور</button></div>`; contentEl.appendChild(w);}
   else if(type==='links') contentEl.appendChild(createLinkItem('موقع الوزارة','https://www.moe.gov.jo'));
-  initSectionDrag(block); initSortableForSection(contentEl); document.getElementById('drop-hint').classList.add('hidden'); toast('✅ تمت إضافة القسم'); updatePageBreakLines(); return block;
+  initSectionDrag(block); initSortableForSection(contentEl); document.getElementById('drop-hint').classList.add('hidden'); toast('✅ تمت إضافة القسم'); updatePageBreakLines(); setTimeout(()=>injectInsertBars(contentEl), 80); return block;
 }
 function addToSection(sectionId, type){ let contentEl=document.getElementById('content-'+sectionId); if(contentEl) addElementToSection(contentEl, type); }
 function addElementToSection(contentEl, type){
@@ -1586,7 +1836,7 @@ function addElementToSection(contentEl, type){
   else if(type==='infogrid') newEl=createInfoGrid([['حقل',''],['حقل',''],['حقل','']]);
   else if(type==='spacer') newEl=createSpacer();
   else if(type==='pdf'){ triggerPdfUpload(contentEl); return; }
-  if(newEl){ contentEl.appendChild(newEl); toast('✅ تمت الإضافة'); updatePageBreakLines(); }
+  if(newEl){ contentEl.appendChild(newEl); toast('✅ تمت الإضافة'); updatePageBreakLines(); refreshInsertBars(); }
 }
 function createSpacer(initialHeight=40){
   let div=document.createElement('div');
@@ -1992,6 +2242,8 @@ function exportPDF(){
 
   // استخدم النسخة المعدلة (img بدلا من canvas)
   printContent.innerHTML=srcCover.outerHTML+sectionsClone.innerHTML;
+  // ✅ تأكد من بقاء anchor IDs في نسخة الطباعة
+  // (محفوظة تلقائياً لأننا نسخنا innerHTML كاملاً)
   printContent.querySelectorAll('.dynamic-spacer').forEach(sp=>{ let h=sp.getAttribute('data-height')||'40'; let div=document.createElement('div'); div.style.cssText='height:'+h+'px;width:100%;display:block;'; sp.parentNode.replaceChild(div,sp); });
   printContent.querySelectorAll('button, .section-controls, .section-add-bar, .spacer-controls, .sec-add-btn, .card-remove, .info-item-remove, .link-item-remove, .img-block-remove, .single-field-remove, .between-drop, .drag-icon, .cover-upload-btn, input').forEach(el=>el.style.display='none');
   printContent.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));
@@ -2098,10 +2350,441 @@ function restoreFromFile(e){
   reader.readAsText(file);
   e.target.value='';
 }
+// TOC System
+let tocSelectedPosition = null;
+
+function calcPageNum(el){
+  let page = document.getElementById('a4-page');
+  if(!page) return 1;
+  let pageTop = page.getBoundingClientRect().top + window.scrollY;
+  let elTop   = el.getBoundingClientRect().top  + window.scrollY;
+  let relativeY = elTop - pageTop;
+  let pageH  = 1123;
+  let coverEl = document.getElementById('page-cover');
+  let coverH = coverEl ? coverEl.offsetHeight : pageH;
+  if(relativeY < coverH) return 1;
+  return Math.max(2, Math.floor((relativeY - coverH) / pageH) + 2);
+}
+
+function getEntryIcon(title){
+  let icons = ['📌','📋','📊','🔍','👁','🎓','🤝','🔬','⚽','🌍','🏅','📆','👪','💻','🚀','📅','👤','🎯','🏆','💡','🖼','🔗','✏','📝','🎨','🏫','📚','📞','🏆'];
+  for(let ic of icons){ if(title.startsWith(ic)) return ic; }
+  // Unicode emoji range
+  let m = [...title].find(c => c.codePointAt(0) > 0x1F000);
+  return m || '◆';
+}
+
+function collectTocData(){
+  let entries = [];
+  document.querySelectorAll('.page-section').forEach(sec => {
+    if(sec.dataset.type === 'toc') return;
+    let hdr = sec.querySelector('.section-header span[contenteditable]');
+    if(!hdr) return;
+    let title = hdr.textContent.trim();
+    if(!title) return;
+    // ✅ أضف id للقسم نفسه كـ anchor
+    if(!sec.id) sec.id = 'toc-anchor-' + Date.now() + Math.random().toString(36).slice(2,5);
+    let anchorId = 'toc-target-' + sec.id;
+    sec.dataset.tocAnchor = anchorId;
+    // ضع علامة anchor مخفية على رأس القسم
+    if(!sec.querySelector('.toc-anchor-mark')){
+      let mark = document.createElement('span');
+      mark.className = 'toc-anchor-mark';
+      mark.id = anchorId;
+      mark.style.cssText = 'position:absolute;top:-40px;left:0;visibility:hidden;';
+      sec.style.position = 'relative';
+      sec.insertBefore(mark, sec.firstChild);
+    } else {
+      sec.querySelector('.toc-anchor-mark').id = anchorId;
+    }
+    entries.push({ type:'section', title, page: calcPageNum(sec), icon: getEntryIcon(title), anchorId });
+    sec.querySelectorAll('.card-item').forEach((card, ci) => {
+      let ct = card.querySelector('.card-title-field');
+      if(!ct) return;
+      let t = ct.textContent.trim();
+      if(t && t !== 'عنوان الكرت'){
+        let ic = card.querySelector('.card-icon-area');
+        let cardAnchorId = 'toc-target-card-' + sec.id + '-' + ci;
+        if(!card.querySelector('.toc-anchor-mark')){
+          let cmark = document.createElement('span');
+          cmark.className = 'toc-anchor-mark';
+          cmark.id = cardAnchorId;
+          cmark.style.cssText = 'position:absolute;top:-30px;left:0;visibility:hidden;';
+          card.style.position = 'relative';
+          card.insertBefore(cmark, card.firstChild);
+        } else {
+          card.querySelector('.toc-anchor-mark').id = cardAnchorId;
+        }
+        entries.push({ type:'card', title:t, page: calcPageNum(card), icon: ic ? ic.textContent.trim() : '•', anchorId: cardAnchorId });
+      }
+    });
+  });
+  return entries;
+}
+
+function buildTocContent(tocWrap){
+  let entries = collectTocData();
+  tocWrap.innerHTML = '';
+
+  let titleBar = document.createElement('div');
+  titleBar.className = 'toc-title-bar';
+  titleBar.innerHTML = '<span style="font-size:1.5rem;margin-left:10px;">📑</span><span class="toc-main-title">فهرس المحتوى</span>';
+  tocWrap.appendChild(titleBar);
+
+  let deco = document.createElement('div');
+  deco.className = 'toc-decorline';
+  tocWrap.appendChild(deco);
+
+  let body = document.createElement('div');
+  body.className = 'toc-body';
+
+  if(!entries.length){
+    body.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:30px;font-size:0.85rem;">لا توجد أقسام بعد.<br>أضف أقساماً ثم اضغط تحديث الفهرس.</div>';
+  } else {
+    entries.forEach(e => {
+      // استخدم <a> بدل <div> حتى يعمل الرابط في PDF
+      let row = document.createElement('a');
+      row.href = '#' + e.anchorId;
+      row.className = 'toc-entry ' + (e.type==='section' ? 'toc-section-entry' : 'toc-card-entry');
+      row.style.cssText = 'text-decoration:none;color:inherit;display:flex;align-items:center;';
+
+      let icon = document.createElement('span');
+      icon.className = 'toc-entry-icon';
+      icon.textContent = e.icon;
+
+      let name = document.createElement('span');
+      name.className = 'toc-entry-name';
+      name.textContent = e.title.replace(/^.\s/, '').replace(/^.{1,2}\s/, '').trim() || e.title;
+
+      let dots = document.createElement('span');
+      dots.className = 'toc-dots';
+
+      let pg = document.createElement('span');
+      pg.className = 'toc-page-num';
+      pg.textContent = e.page;
+
+      row.appendChild(icon); row.appendChild(name); row.appendChild(dots); row.appendChild(pg);
+      body.appendChild(row);
+    });
+  }
+
+  let refreshBtn = document.createElement('button');
+  refreshBtn.className = 'toc-refresh-btn';
+  refreshBtn.textContent = 'تحديث الفهرس';
+  refreshBtn.onclick = () => buildTocContent(tocWrap);
+  body.appendChild(refreshBtn);
+
+  let note = document.createElement('div');
+  note.className = 'toc-note';
+  note.textContent = 'اضغط تحديث الفهرس بعد إضافة أقسام جديدة';
+  body.appendChild(note);
+
+  tocWrap.appendChild(body);
+}
+
+function openTocPositionModal(){
+  let sections = document.querySelectorAll('.page-section');
+  let opts = document.getElementById('toc-pos-options');
+  opts.innerHTML = '';
+  tocSelectedPosition = {type:'start'};
+
+  function makeBtn(label, pos, selected){
+    let btn = document.createElement('button');
+    btn.className = 'toc-pos-btn' + (selected ? ' selected' : '');
+    btn.innerHTML = label;
+    btn.onclick = () => {
+      opts.querySelectorAll('.toc-pos-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      tocSelectedPosition = pos;
+    };
+    return btn;
+  }
+
+  opts.appendChild(makeBtn('⬆️ في بداية الصفحة (بعد الغلاف مباشرة)', {type:'start'}, true));
+  sections.forEach((sec, i) => {
+    if(sec.dataset.type === 'toc') return;
+    let hdr = sec.querySelector('.section-header span[contenteditable]');
+    let title = hdr ? hdr.textContent.trim() : ('قسم '+(i+1));
+    opts.appendChild(makeBtn('↓ بعد: <strong style="margin-right:4px;">' + title + '</strong>', {type:'after', refId:sec.id}, false));
+  });
+  opts.appendChild(makeBtn('⬇️ في نهاية الصفحة', {type:'end'}, false));
+
+  document.getElementById('toc-position-modal').classList.add('active');
+}
+
+function confirmAddToc(){
+  closeModal('toc-position-modal');
+  // حذف فهرس موجود
+  document.querySelectorAll('.page-section[data-type="toc"]').forEach(el=>el.remove());
+
+  let pos = tocSelectedPosition || {type:'start'};
+  let block;
+  let container = document.getElementById('sections-container');
+  if(pos.type === 'start'){
+    let first = container.querySelector('.page-section');
+    block = addSection('custom', first ? 'before' : 'end', first || null);
+  } else if(pos.type === 'after'){
+    block = addSection('custom', 'after', document.getElementById(pos.refId));
+  } else {
+    block = addSection('custom', 'end');
+  }
+
+  block.dataset.type = 'toc';
+  let ts = block.querySelector('.section-header span[contenteditable]');
+  if(ts) ts.textContent = '📑 فهرس المحتوى';
+  let addBar = block.querySelector('.section-add-bar');
+  if(addBar) addBar.style.display = 'none';
+
+  let contentEl = block.querySelector('.section-content');
+  contentEl.innerHTML = '';
+  let wrap = document.createElement('div');
+  wrap.className = 'toc-wrap';
+  contentEl.appendChild(wrap);
+  buildTocContent(wrap);
+
+  toast('📑 تم إنشاء الفهرس — اضغط تحديث بعد أي تعديل');
+  updatePageBreakLines();
+}
+
+
+
+// ═══════════════════════════════════════════════════
+//  نظام إضافة عنصر بين العناصر — v2
+// ═══════════════════════════════════════════════════
+let _elemInsertState = { afterEl: null, contentEl: null, selectedType: null };
+
+function makeInsertBar(afterEl, contentEl, label, style){
+  let bar = document.createElement('div');
+  bar.className = 'elem-insert-bar';
+  if(style) bar.style.cssText = style;
+  let btn = document.createElement('button');
+  btn.className = 'elem-insert-btn';
+  btn.textContent = label || '＋ إضافة عنصر';
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    _elemInsertState = { afterEl: afterEl, contentEl: contentEl, selectedType: null };
+    document.querySelectorAll('.elem-type-card').forEach(c=>c.classList.remove('selected'));
+    document.getElementById('elem-type-modal').classList.add('active');
+  });
+  bar.appendChild(btn);
+  return bar;
+}
+
+function injectInsertBars(contentEl){
+  if(!contentEl) return;
+  contentEl.querySelectorAll('.elem-insert-bar').forEach(b=>b.remove());
+  // زر "إضافة عنصر" بعد كل عنصر فقط
+  let realChildren = Array.from(contentEl.children).filter(c => !c.classList.contains('elem-insert-bar'));
+  realChildren.forEach(child => {
+    let bar = makeInsertBar(child, contentEl, '+ إضافة عنصر');
+    child.after(bar);
+  });
+}
+
+function refreshInsertBars(){
+  document.querySelectorAll('.section-content').forEach(ce => injectInsertBars(ce));
+}
+
+function selectElemType(type, card){
+  document.querySelectorAll('.elem-type-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  _elemInsertState.selectedType = type;
+}
+
+function confirmElemTypeChoice(){
+  let s = _elemInsertState;
+  if(!s.selectedType){ toast('اختر نوع العنصر أولاً'); return; }
+  closeModal('elem-type-modal');
+
+  let contentEl = s.contentEl;
+  let afterEl = s.afterEl;
+  let type = s.selectedType;
+
+  function insertNewEl(newEl){
+    if(!newEl) return;
+    if(afterEl === null){
+      // بداية القسم
+      let firstReal = Array.from(contentEl.children).find(c=>!c.classList.contains('elem-insert-bar'));
+      if(firstReal) contentEl.insertBefore(newEl, firstReal);
+      else contentEl.appendChild(newEl);
+    } else {
+      afterEl.after(newEl);
+    }
+    // أعد بناء الأشرطة
+    setTimeout(()=>{ injectInsertBars(contentEl); reinitAllSortables(); updatePageBreakLines(); }, 30);
+    toast('✅ تمت إضافة العنصر');
+  }
+
+  if(type==='text')     insertNewEl(createTextBlock('اكتب هنا...'));
+  else if(type==='card')     insertNewEl(createCard('⭐','عنوان الكرت','تفاصيل','متميز','badge-green'));
+  else if(type==='field')    insertNewEl(createSingleField('التسمية','القيمة'));
+  else if(type==='infogrid') insertNewEl(createInfoGrid([['حقل',''],['حقل',''],['حقل','']]));
+  else if(type==='spacer')   insertNewEl(createSpacer());
+  else if(type==='table'){
+    // أحفظ الموضع ثم افتح modal الجدول
+    window._pendingInsert = {afterEl, contentEl};
+    openTableModal(contentEl);
+  }
+  else if(type==='link'){
+    window._pendingInsert = {afterEl, contentEl};
+    openLinkModal(contentEl);
+  }
+  else if(type==='image'){
+    triggerImageUpload(contentEl);
+    setTimeout(()=>injectInsertBars(contentEl), 500);
+  }
+}
+
+
+
+
+// ═════════════════════════════════════════════════════
+//  نظام تحديد الموضع الموحد
+// ═════════════════════════════════════════════════════
+let _posState = { mode:null, type:null, selectedPos:null, selectedSecId:null };
+
+function _buildPosOptionBtn(listEl, label, fn, selected){
+  let btn=document.createElement('button');
+  btn.className='pos-option-btn'+(selected?' selected':'');
+  btn.innerHTML=label;
+  btn.onclick=()=>{
+    listEl.querySelectorAll('.pos-option-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected'); fn();
+  };
+  listEl.appendChild(btn); return btn;
+}
+
+function _buildPosList(listEl, onSelect){
+  listEl.innerHTML='';
+  let secs=Array.from(document.querySelectorAll('.page-section')).filter(s=>s.dataset.type!=='toc');
+  let b1=_buildPosOptionBtn(listEl,'<span>&#11014;</span><span class="pos-section-name">في البداية (أول الصفحة)</span>',()=>onSelect({type:'start'}),!secs.length);
+  secs.forEach((sec,i)=>{
+    let hdr=sec.querySelector('.section-header span[contenteditable]');
+    let t=hdr?hdr.textContent.trim():'قسم '+(i+1);
+    _buildPosOptionBtn(listEl,'<span>&#8595;</span><span class="pos-section-name">بعد: '+t+'</span><span class="pos-badge">بعده</span>',()=>onSelect({type:'after',refId:sec.id}),false);
+  });
+  let bend=_buildPosOptionBtn(listEl,'<span>&#11015;</span><span class="pos-section-name">في النهاية (آخر الصفحة)</span>',()=>onSelect({type:'end'}),secs.length>0);
+  if(secs.length) bend.click(); else b1.click();
+}
+
+function _buildSecPicker(listEl, onSelect){
+  listEl.innerHTML='';
+  let secs=Array.from(document.querySelectorAll('.page-section')).filter(s=>s.dataset.type!=='toc');
+  if(!secs.length){ listEl.innerHTML='<div style="text-align:center;color:#94a3b8;padding:20px;">لا توجد أقسام. أضف قسماً أولاً.</div>'; return; }
+  secs.forEach((sec,i)=>{
+    let hdr=sec.querySelector('.section-header span[contenteditable]');
+    let t=hdr?hdr.textContent.trim():'قسم '+(i+1);
+    let cnt=sec.querySelectorAll('.section-content > *').length;
+    let ic=[...t].find(c=>c.codePointAt(0)>0x1F000)||'📌';
+    _buildPosOptionBtn(listEl,'<span style="font-size:1rem;">'+ic+'</span><span class="pos-section-name">'+t+'</span><span class="pos-badge">'+cnt+'</span>',()=>onSelect(sec.id),i===0);
+  });
+  if(secs.length) onSelect(secs[0].id);
+}
+
+function switchPosTab(tab, tabBtn){
+  document.querySelectorAll('.pos-tab-btn').forEach(b=>b.classList.remove('active'));
+  tabBtn.classList.add('active');
+  let L=document.getElementById('pos-options-list');
+  if(tab==='section') _buildSecPicker(L, id=>{_posState.selectedSecId=id;});
+  else _buildPosList(L, p=>{_posState.selectedPos=p;});
+}
+
+function _openPosModal(title, subtitle, confirmLabel, showTabs){
+  document.getElementById('pos-modal-title').textContent=title;
+  document.getElementById('pos-modal-subtitle').textContent=subtitle;
+  document.getElementById('pos-modal-tabs').style.display=showTabs?'flex':'none';
+  document.getElementById('pos-confirm-btn').textContent=confirmLabel;
+  document.getElementById('position-modal').classList.add('active');
+}
+
+function choosePositionAndAddSection(type){
+  _posState={mode:'section',type,selectedPos:{type:'end'},selectedSecId:null};
+  let nm={personal:'👤 المعلومات الشخصية',goals:'🎯 الأهداف والرؤية',achievements:'🏆 الإنجازات',projects:'💡 المشاريع',results:'📊 النتائج',gallery:'🖼️ معرض الصور',links:'🔗 الروابط',custom:'✏️ قسم مخصص'};
+  _buildPosList(document.getElementById('pos-options-list'), p=>{_posState.selectedPos=p;});
+  _openPosModal('📌 أين تضيف: '+(nm[type]||'القسم')+'؟','اختر الموضع في الصفحة:','✅ إضافة القسم',false);
+}
+
+function choosePositionAndAdd(type){
+  _posState={mode:'newSection',type,selectedPos:{type:'end'},selectedSecId:null};
+  _buildPosList(document.getElementById('pos-options-list'), p=>{_posState.selectedPos=p;});
+  _openPosModal('📌 أين تضيف القسم الجديد؟','اختر الموضع في الصفحة:','✅ إضافة القسم',false);
+}
+
+function choosePositionAndAddElement(elType){
+  let secs=Array.from(document.querySelectorAll('.page-section:not([data-type="toc"])'));
+  if(!secs.length){ toast('أضف قسماً أولاً'); return; }
+  if(secs.length===1){ let c=secs[0].querySelector('.section-content'); if(c) addElementToSection(c,elType); return; }
+  _posState={mode:'element',type:elType,selectedPos:null,selectedSecId:secs[0].id};
+  let nm={text:'📝 نص',card:'🃏 كرت إنجاز',image:'🖼️ صورة',table:'📊 جدول',field:'🔹 حقل',link:'🔗 رابط',infogrid:'📋 شبكة معلومات',spacer:'↕️ مسافة',pdf:'📄 ملف PDF'};
+  // أخفِ التبويبات (قسم واحد فقط: اختر القسم)
+  document.getElementById('pos-modal-tabs').style.display='none';
+  _buildSecPicker(document.getElementById('pos-options-list'), id=>{ _posState.selectedSecId=id; });
+  _openPosModal('أين تضيف: '+(nm[elType]||elType)+'؟','اختر القسم الذي تريد الإضافة إليه:','✅ إضافة العنصر', false);
+}
+
+function confirmPositionChoice(){
+  closeModal('position-modal');
+  let s=_posState, container=document.getElementById('sections-container');
+  function place(block, pos){
+    if(!pos||pos.type==='end') return;
+    if(pos.type==='start'){ let f=container.querySelector('.page-section'); if(f) container.insertBefore(block,f); }
+    else if(pos.type==='after'){ let r=document.getElementById(pos.refId); if(r) r.after(block); }
+    reinitAllSortables(); updatePageBreakLines();
+  }
+  if(s.mode==='section'){
+    let block=addSection(s.type); place(block,s.selectedPos);
+  } else if(s.mode==='newSection'){
+    let block=addSection('custom'); place(block,s.selectedPos);
+  } else if(s.mode==='element'){
+    let ce=document.getElementById('content-'+s.selectedSecId);
+    if(ce){ addElementToSection(ce,s.type); } else toast('تعذر إيجاد القسم');
+  }
+}
+
+
 function confirmReset(){ document.getElementById('reset-modal').classList.add('active'); }
 function doReset(){ closeModal('reset-modal'); setTimeout(()=>location.reload(), 200); }
 function dropBetween(e,dropEl,pos){ e.preventDefault(); e.stopPropagation(); dropEl.classList.remove('drag-over'); if(!draggedElementType) return; let section=dropEl.closest('.page-section'); if(section){ let contentEl=section.querySelector('.section-content'); if(contentEl) addElementToSection(contentEl,draggedElementType); } draggedElementType=null; }
-window.addEventListener('DOMContentLoaded',()=>{ reinitAllSortables(); updatePageBreakLines(); initMobileOverlay(); });
+// ═══════════════════════════════════════════
+// عداد الزوار — counterapi.dev
+// ═══════════════════════════════════════════
+function initVisitorCounter(){
+  // namespace فريد للموقع
+  let ns = 'teacher-portfolio-iyadkhadr';
+  let key = 'visits';
+  // سجّل زيارة جديدة واحصل على العدد
+  fetch('https://api.counterapi.dev/v1/' + ns + '/' + key + '/up', {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' }
+  })
+  .then(r => r.json())
+  .then(data => {
+    let count = data.count || data.value || '—';
+    let el = document.getElementById('vc-num');
+    if(el) el.textContent = Number(count).toLocaleString('ar-EG');
+  })
+  .catch(() => {
+    // fallback: hits.sh badge
+    let el = document.getElementById('vc-num');
+    if(el) el.innerHTML = '<img src="https://hits.sh/silentjob2-spec.github.io/teacher-portfolio.svg?style=flat" style="height:18px;vertical-align:middle;" />';
+  });
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  reinitAllSortables();
+  updatePageBreakLines();
+  initMobileOverlay();
+  refreshInsertBars();
+
+  // MutationObserver: أعد بناء الأشرطة عند أي تغيير في الأقسام
+  let _barTimer = null;
+  let obs = new MutationObserver(()=>{
+    clearTimeout(_barTimer);
+    _barTimer = setTimeout(refreshInsertBars, 120);
+  });
+  let sectionsContainer = document.getElementById('sections-container');
+  if(sectionsContainer) obs.observe(sectionsContainer, {childList:true, subtree:true});
+});
 // إلغاء تحديد الصور عند النقر في أي مكان آخر
 document.addEventListener('click',()=>{
   document.querySelectorAll('.img-block-item.selected').forEach(el=>el.classList.remove('selected'));
@@ -2154,5 +2837,60 @@ window.addEventListener('resize', ()=>{
 });
 
 </script>
+<!-- ══ نافذة اختيار نوع العنصر ══ -->
+<div class="modal-overlay" id="elem-type-modal">
+  <div class="modal-box" style="max-width:440px;">
+    <h3>➕ إضافة عنصر</h3>
+    <p style="font-size:0.8rem;color:#64748b;margin-bottom:4px;" id="elem-type-subtitle">اختر نوع العنصر:</p>
+    <div class="elem-type-grid">
+      <div class="elem-type-card" onclick="selectElemType('text',this)"><span class="etc-icon">📝</span><span class="etc-name">نص</span></div>
+      <div class="elem-type-card" onclick="selectElemType('card',this)"><span class="etc-icon">🃏</span><span class="etc-name">كرت إنجاز</span></div>
+      <div class="elem-type-card" onclick="selectElemType('image',this)"><span class="etc-icon">🖼️</span><span class="etc-name">صورة</span></div>
+      <div class="elem-type-card" onclick="selectElemType('table',this)"><span class="etc-icon">📊</span><span class="etc-name">جدول</span></div>
+      <div class="elem-type-card" onclick="selectElemType('field',this)"><span class="etc-icon">🔹</span><span class="etc-name">حقل</span></div>
+      <div class="elem-type-card" onclick="selectElemType('link',this)"><span class="etc-icon">🔗</span><span class="etc-name">رابط</span></div>
+      <div class="elem-type-card" onclick="selectElemType('infogrid',this)"><span class="etc-icon">📋</span><span class="etc-name">شبكة</span></div>
+      <div class="elem-type-card" onclick="selectElemType('spacer',this)"><span class="etc-icon">↕️</span><span class="etc-name">مسافة</span></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal('elem-type-modal')">إلغاء</button>
+      <button class="modal-btn modal-btn-primary" id="elem-type-confirm-btn" onclick="confirmElemTypeChoice()">✅ إضافة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ نافذة تحديد الموضع الموحدة ══ -->
+<div class="modal-overlay" id="position-modal">
+  <div class="modal-box" style="max-width:460px;">
+    <h3 id="pos-modal-title">📌 أين تضيف؟</h3>
+    <p style="font-size:0.8rem;color:#64748b;margin-bottom:10px;" id="pos-modal-subtitle">اختر الموضع المناسب:</p>
+    <div class="pos-modal-tabs" id="pos-modal-tabs" style="display:none;">
+      <button class="pos-tab-btn active">📌 اختر القسم</button>
+    </div>
+    <div class="pos-options-list" id="pos-options-list"></div>
+    <div class="modal-actions" style="margin-top:14px;">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal('position-modal')">إلغاء</button>
+      <button class="modal-btn modal-btn-primary" id="pos-confirm-btn" onclick="confirmPositionChoice()">✅ إضافة هنا</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ نافذة موضع الفهرس ══ -->
+<div class="modal-overlay" id="toc-position-modal">
+  <div class="modal-box" style="max-width:440px;">
+    <h3>📑 إضافة فهرس المحتوى</h3>
+    <p style="font-size:0.82rem;color:#64748b;margin-bottom:4px;">اختر أين تريد وضع الفهرس:</p>
+
+    <div class="toc-pos-options" id="toc-pos-options">
+      <!-- تُعبأ ديناميكياً -->
+    </div>
+
+    <div class="modal-actions" style="margin-top:14px;">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal('toc-position-modal')">إلغاء</button>
+      <button class="modal-btn modal-btn-primary" onclick="confirmAddToc()">✅ إضافة الفهرس</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
