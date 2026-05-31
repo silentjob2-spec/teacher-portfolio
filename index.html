@@ -35,6 +35,16 @@
   --shadow: 0 2px 12px rgba(0,0,0,0.10);
   --a4-w: 794px;
   --a4-scale: 0.85;
+  /* ── أبعاد صفحة A4 الموحّدة (مصدر واحد للحقيقة) ──
+     A4 = 210mm × 297mm = 794px × 1123px عند 96dpi.
+     نفس القيم تُستخدم في المحرر وفي تصدير PDF لضمان التطابق التام. */
+  --page-w: 794px;
+  --page-h: 1123px;
+  --page-pad-x: 53px;   /* هوامش جانبية ≈ 14mm */
+  --page-pad-top: 45px; /* هامش علوي ≈ 12mm */
+  --page-pad-bot: 53px; /* هامش سفلي ≈ 14mm */
+  --page-gap: 26px;     /* الفراغ بين الورقات في منطقة العمل */
+  --sheet-shadow: 0 6px 28px rgba(15,23,42,0.16), 0 1px 3px rgba(15,23,42,0.10);
   /* ── متغيرات التصميم الكاملة ── */
   --page-bg: #ffffff;
   --canvas-bg: #e8edf5;
@@ -61,13 +71,13 @@ body {
 
 #toolbar {
   height: var(--toolbar-h);
-  background: #fff;
-  border-bottom: 3px solid var(--primary);
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7fc 100%);
+  border-bottom: 1px solid #d6deea;
+  box-shadow: 0 2px 10px rgba(30,58,138,0.07);
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 0 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.09);
   z-index: 100;
   flex-shrink: 0;
   flex-wrap: nowrap;
@@ -319,8 +329,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 20px;
+  padding: 34px 20px 80px;
   position: relative;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(100,116,139,0.18) 1px, transparent 0) 0 0 / 22px 22px,
+    linear-gradient(180deg, #eef2f8 0%, #e6ebf4 100%);
+  background-color: #e9eef6;
 }
 
 #drop-hint {
@@ -339,53 +353,70 @@ body {
 #drop-hint p { font-size: 0.95rem; font-weight: 700; }
 
 #a4-page {
-  width: var(--a4-w);
-  min-height: 1123px;
+  width: var(--page-w);
+  min-height: var(--page-h);
   height: auto;
-  background: var(--page-bg);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.18);
-  border-radius: 4px;
+  background: transparent;
   position: relative;
   z-index: 2;
   padding: 0;
   overflow: visible;
   flex-shrink: 0;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
-.page-break-line {
+/* ── ورقات A4 حقيقية (خلفية بيضاء بظل، تظهر خلف المحتوى) ── */
+.a4-sheet {
   position: absolute;
   left: 0;
-  right: 0;
-  z-index: 10;
+  width: var(--page-w);
+  height: var(--page-h);
+  background: var(--page-bg);
+  box-shadow: var(--sheet-shadow);
+  border-radius: 3px;
+  z-index: 0;
   pointer-events: none;
-  border-top: 2px dashed #bfdbfe;
-  text-align: center;
+  overflow: hidden;
 }
-.page-break-line .page-break-text {
+.a4-sheet::after {
+  /* خط هامش داخلي خفيف يوضح منطقة الكتابة الآمنة */
+  content: '';
   position: absolute;
+  top: var(--page-pad-top);
+  bottom: var(--page-pad-bot);
+  left: var(--page-pad-x);
+  right: var(--page-pad-x);
+  border: 1px dashed rgba(148,163,184,0.28);
+  border-radius: 2px;
+}
+.a4-sheet-num {
+  position: absolute;
+  bottom: 14px;
   left: 50%;
-  top: -12px;
   transform: translateX(-50%);
-  background: #eff6ff;
-  color: #3b82f6;
-  font-size: 0.65rem;
   font-family: 'Cairo', sans-serif;
-  font-weight: 700;
-  padding: 1px 12px;
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: #94a3b8;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 20px;
-  border: 1px solid #bfdbfe;
+  padding: 2px 14px;
+  z-index: 5;
   white-space: nowrap;
-  display: inline-block;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-@media (max-width: 1200px) {
-  #a4-page { transform: scale(0.85); transform-origin: top center; }
-  #canvas-area { align-items: flex-start; padding-right: 5px; }
+/* عنصر دُفع لبداية صفحة جديدة (يُحيّد هامشه عند الطباعة) */
+.pg-pushed { margin-top: var(--push, 0) !important; }
+
+/* الخطوط الوهمية القديمة أُلغيت — استُبدلت بورقات A4 حقيقية (.a4-sheet) */
+
+@media (max-width: 1280px) {
+  #a4-page { transform: scale(0.82); transform-origin: top center; }
+  #canvas-area { align-items: center; }
 }
-@media (max-width: 900px) {
-  #a4-page { transform: scale(0.62); transform-origin: top center; }
+@media (max-width: 980px) {
+  #a4-page { transform: scale(0.6); transform-origin: top center; }
   :root { --sidebar-w: 200px; }
 }
 
@@ -396,12 +427,16 @@ body {
   text-align: center;
   position: relative;
   overflow: hidden;
-  min-height: 400px;
+  height: var(--page-h);
+  min-height: var(--page-h);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 0;
+  border-radius: 3px;
+  box-shadow: var(--sheet-shadow);
+  z-index: 2;
 }
 #page-cover::before {
   content: '';
@@ -458,9 +493,31 @@ body {
 #cover-year { font-size: 0.88rem; opacity: 0.75; position: relative; z-index: 1; outline: none; }
 
 .page-section {
-  margin: 0 28px 20px 28px;
+  margin: 0 0 18px 0;
   position: relative;
+  z-index: 2;
 }
+
+/* حاوية المحتوى تأخذ هوامش الورقة، وتبدأ أسفل الغلاف بفراغ ورقة */
+#sections-container {
+  position: relative;
+  z-index: 2;
+  padding-left: var(--page-pad-x);
+  padding-right: var(--page-pad-x);
+  margin-top: calc(var(--page-gap) + var(--page-pad-top));
+}
+
+/* ── منع قطع العناصر بين صفحتين (يتطابق مع الطباعة) ── */
+.card-item, .info-item, .single-field, .link-item-block,
+.img-block-item, .content-table tr, .section-header,
+.toc-entry, .pdf-page-item {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+/* ── حل مشكلة الصور الكبيرة: لا تتجاوز الصورة عرض الورقة أبداً ── */
+.img-block-item { max-width: 100% !important; }
+.img-block-item img { max-width: 100%; }
+.text-block, .content-table { max-width: 100%; }
 
 .section-header {
   background: linear-gradient(135deg, var(--sec-hdr-from), var(--sec-hdr-to));
@@ -1255,18 +1312,16 @@ a.toc-entry:hover { filter: brightness(0.94); }
 
   #canvas-area {
     width: 100vw;
-    padding: 12px 8px;
-    overflow-x: hidden;
+    padding: 12px 0 60px;
+    overflow-x: auto;
   }
   #a4-page {
-    transform: none !important;
-    width: 100% !important;
-    min-width: unset;
-    font-size: 0.75rem;
+    transform: scale(0.46) !important;
+    transform-origin: top center;
+    font-size: 0.95rem;
   }
-  :root { --a4-w: 100%; }
 
-  .page-section { margin: 0 10px 16px; }
+  .page-section { margin: 0 0 16px; }
   .section-add-bar { flex-wrap: wrap; gap: 4px; }
   .sec-add-btn { font-size: 0.68rem; padding: 3px 7px; }
 }
@@ -1290,21 +1345,41 @@ a.toc-entry:hover { filter: brightness(0.94); }
 }
 
 @media print {
-  @page { margin: 0; size: A4 portrait; }
+  /* هامش الصفحة صفر — نتحكم بالهوامش عبر حشوة #print-content (يضمن عدم قص أي جانب) */
+  @page { size: A4 portrait; margin: 0; }
+
   body > * { display: none !important; }
   #print-area { display: block !important; position: static !important; }
   body { margin: 0; background: white; overflow: visible; height: auto; display: block; }
-  #print-area { width: 210mm; }
+  #print-area { width: 210mm; margin: 0 auto; }
+
+  /* الغلاف: صفحة كاملة بعرض الورقة بالكامل (بلا هوامش) */
   #print-cover { width: 210mm; height: 297mm; page-break-after: always; break-after: page; page-break-inside: avoid; display: block; overflow: hidden; padding: 0; margin: 0; }
-  #print-content { width: 210mm; padding: 14px 28px 40px; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* المحتوى: عرض الورقة الكامل 210mm مع حشوة جانبية 14mm = منطقة كتابة 182mm (تطابق المحرر) */
+  #print-content { width: 210mm; box-sizing: border-box; padding: 12mm 14mm 14mm 14mm; margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* الفاصل الحقيقي: نفس النقاط التي تنكسر عندها الورقات في المحرر */
+  #print-content .pg-break { page-break-before: always !important; break-before: page !important; }
+  /* تحييد دفعات المحرر البصرية (التي تُنزل العنصر لأعلى الورقة التالية) */
+  #print-content .pg-pushed { margin-top: 0 !important; }
+
   #print-content .section-controls, #print-content .sec-add-btn, #print-content .section-add-bar, #print-content .card-remove,
   #print-content .info-item-remove, #print-content .link-item-remove, #print-content .img-block-remove,
   #print-content .single-field-remove, #print-content .between-drop, #print-content .drag-icon,
   #print-content .img-resize-handle, #print-content .img-size-badge,
-  #print-content .img-toolbar,
-  #print-content .elem-insert-bar,
+  #print-content .img-toolbar, #print-content .pdf-pages-header, #print-content .pdf-page-label,
+  #print-content .elem-insert-bar, #print-content .a4-sheet, #print-content .a4-sheet-num,
   #print-content .spacer-controls, #print-content .spacer-drag-bar { display: none !important; }
   #print-content .section-hidden { display: none; }
+  /* امنع أي فيض أفقي يسبب قص الجوانب */
+  #print-content, #print-content * { max-width: 100%; }
+  #print-content .table-wrap { overflow: visible !important; }
+  /* منع قص العناصر عمودياً */
+  #print-content .card-item, #print-content .img-block-item, #print-content .single-field,
+  #print-content .link-item-block, #print-content .info-item, #print-content tr,
+  #print-content .pdf-page-item, #print-content .pdf-page-canvas, #print-content img.pdf-page-canvas,
+  #print-content .section-header { break-inside: avoid; page-break-inside: avoid; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 #print-area { display: none; position: fixed; top: 0; left: 0; width: 210mm; z-index: -1; }
@@ -1394,46 +1469,62 @@ a.toc-entry:hover { filter: brightness(0.94); }
   gap: 0;
   margin-bottom: 8px;
   border-radius: 6px;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;   /* ليتموضع شريط الاسم فوقه دون أخذ مساحة */
 }
+/* شريط اسم الملف: عائم في الزاوية لا يستهلك مساحة عمودية (وعنصر تحكم يُخفى عند التصدير) */
 .pdf-pages-header {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 6;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(135deg, #eff6ff, #e0e7ff);
-  border: 1.5px solid #bfdbfe;
-  border-radius: 8px 8px 0 0;
-  padding: 8px 12px;
-  font-size: 0.78rem;
+  gap: 8px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(2px);
+  border: 1px solid #bfdbfe;
+  border-radius: 18px;
+  padding: 3px 10px;
+  font-size: 0.7rem;
   font-weight: 800;
   color: var(--primary);
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  max-width: calc(100% - 12px);
+  opacity: 0.45;
+  transition: opacity 0.15s;
+}
+.pdf-pages-wrap:hover .pdf-pages-header { opacity: 1; }
+.pdf-pages-header > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
 }
 .pdf-pages-header .pdf-remove-btn {
-  background: rgba(220,38,38,0.1);
-  border: none; border-radius: 4px;
-  padding: 2px 8px; font-size: 0.7rem;
+  background: rgba(220,38,38,0.12);
+  border: none; border-radius: 12px;
+  padding: 2px 9px; font-size: 0.7rem;
   cursor: pointer; color: var(--danger);
   font-family: 'Cairo', sans-serif; font-weight: 700;
+  flex-shrink: 0;
 }
-.pdf-pages-header .pdf-remove-btn:hover { background: rgba(220,38,38,0.2); }
+.pdf-pages-header .pdf-remove-btn:hover { background: rgba(220,38,38,0.25); }
 .pdf-page-item {
   width: 100%;
   position: relative;
   background: #fff;
-  border-left: 1.5px solid #e2e8f0;
-  border-right: 1.5px solid #e2e8f0;
-}
-.pdf-page-item:last-child {
-  border-bottom: 1.5px solid #e2e8f0;
-  border-radius: 0 0 6px 6px;
 }
 .pdf-page-item + .pdf-page-item {
-  border-top: 2px dashed #bfdbfe;
+  margin-top: 0;
 }
 .pdf-page-canvas {
-  width: 100%;
-  height: auto;
   display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(var(--page-h) - var(--page-pad-top) - var(--page-pad-bot) - 26px);
+  margin: 0 auto;
 }
 .pdf-page-label {
   position: absolute;
@@ -1469,14 +1560,14 @@ a.toc-entry:hover { filter: brightness(0.94); }
 
 /* ===== معاينة الغلاف في الكانفاس ===== */
 #pdf-cover-preview-page {
-  width: var(--a4-w);
-  height: 1123px;
+  width: var(--page-w);
+  height: var(--page-h);
   background: #fff;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.18);
-  border-radius: 4px;
+  box-shadow: var(--sheet-shadow);
+  border-radius: 3px;
   overflow: hidden;
   flex-shrink: 0;
-  margin-bottom: 12px;
+  margin-bottom: var(--page-gap);
   display: none;
   position: relative;
 }
@@ -1743,8 +1834,8 @@ a.toc-entry:hover { filter: brightness(0.94); }
       <!-- ── هوامش الأقسام ── -->
       <div class="sb-section-title" style="margin-top:10px;">↔️ هوامش الأقسام</div>
       <div class="design-slider-row">
-        <input type="range" min="0" max="50" value="28" oninput="setSectionMargin(this.value);document.getElementById('margin-val').textContent=this.value+'px'">
-        <span id="margin-val" class="design-slider-val">28px</span>
+        <input type="range" min="0" max="40" value="0" oninput="setSectionMargin(this.value);document.getElementById('margin-val').textContent=this.value+'px'">
+        <span id="margin-val" class="design-slider-val">0px</span>
       </div>
 
     </div>
@@ -2025,6 +2116,7 @@ function createImgBlockItem(src, name){
     box.style.width=fw+'px';
     box.style.height=(fh+22)+'px';
     sizeDisp.textContent=fw+' × '+fh;
+    updatePageBreakLines();
   };
 
   // ── مقبض السحب (زاوية يمين أسفل) ──
@@ -2158,8 +2250,13 @@ function applyFullTheme(name){
 }
 
 function setSectionMargin(val){
-  document.querySelectorAll('.page-section').forEach(s=>{ s.style.marginLeft=val+'px'; s.style.marginRight=val+'px'; });
-  document.documentElement.style.setProperty('--sec-margin', val+'px');
+  // الهامش الجانبي الإضافي داخل هوامش الورقة الأساسية
+  let pad = (parseInt(val)||0);
+  let cont = document.getElementById('sections-container');
+  if(cont){
+    cont.style.paddingLeft  = 'calc(var(--page-pad-x) + ' + pad + 'px)';
+    cont.style.paddingRight = 'calc(var(--page-pad-x) + ' + pad + 'px)';
+  }
   updatePageBreakLines();
 }
 function setFontScale(val){ document.getElementById('a4-page').style.fontSize=(val/100)+'rem'; updatePageBreakLines(); }
@@ -2192,28 +2289,158 @@ function removePdfCover(){
   updatePageBreakLines();
   toast('🗑️ تم إزالة غلاف PDF');
 }
-function updatePageBreakLines(){
-  document.querySelectorAll('.page-break-line').forEach(l=>l.remove());
-  let a4=document.getElementById('a4-page');
-  let pageH=1123;
-  let totalH=a4.scrollHeight;
-  let pages=Math.floor(totalH/pageH);
-  let hasCover = (pdfCoverImage && pdfCoverImage !== '');
-  let startPage = hasCover ? 2 : 1;
-  for(let i=1; i<=pages; i++){
-    let lineDiv=document.createElement('div');
-    lineDiv.className='page-break-line';
-    lineDiv.style.top=(i*pageH)+'px';
-    let pageNumber = startPage + (i-1);
-    let textSpan=document.createElement('div');
-    textSpan.className='page-break-text';
-    textSpan.textContent=`— صفحة جديدة ${pageNumber} —`;
-    lineDiv.appendChild(textSpan);
-    a4.appendChild(lineDiv);
-  }
+// ════════════════════════════════════════════════════════
+//  محرك ترقيم الصفحات الحقيقي (Pagination)
+//  يقسّم المحتوى إلى ورقات A4 حقيقية بنفس قواعد كسر الطباعة،
+//  بحيث تتطابق منطقة العمل مع ملف PDF تطابقاً تاماً.
+// ════════════════════════════════════════════════════════
+let _paginateRAF = null;
+let _pgBusy = false;
+function updatePageBreakLines(){           // اسم متوافق مع بقية الكود
+  if(_pgBusy) return;                       // تجاهل التغييرات الذاتية أثناء الترقيم
+  if(_paginateRAF) cancelAnimationFrame(_paginateRAF);
+  _paginateRAF = requestAnimationFrame(()=>{
+    _pgBusy = true;
+    try { paginate(); } catch(e){ console.error(e); }
+    setTimeout(()=>{ _pgBusy = false; }, 140);   // فترة تهدئة لتفادي الحلقة
+  });
 }
+
+function _px(v){ return parseFloat(getComputedStyle(document.documentElement).getPropertyValue(v)) || 0; }
+
+function paginate(){
+  let doc = document.getElementById('a4-page');
+  let cover = document.getElementById('page-cover');
+  let container = document.getElementById('sections-container');
+  if(!doc || !container) return;
+
+  // احفظ موضع التمرير لمنع قفز الصفحة أثناء إعادة الترقيم
+  let scroller = document.getElementById('canvas-area');
+  let savedScroll = scroller ? scroller.scrollTop : 0;
+
+  let PAGE_H = _px('--page-h') || 1123;
+  let PAD_T  = _px('--page-pad-top') || 45;
+  let PAD_B  = _px('--page-pad-bot') || 53;
+  let GAP    = _px('--page-gap') || 26;
+  let USABLE = PAGE_H - PAD_T - PAD_B;          // ارتفاع منطقة الكتابة في كل ورقة
+
+  // 1) تنظيف الدفعات والورقات السابقة
+  doc.querySelectorAll('.a4-sheet').forEach(s=>s.remove());
+  let units = _collectUnits(container);
+  units.forEach(u=>{ u.classList.remove('pg-break','pg-pushed'); u.style.removeProperty('--push'); });
+
+  // 2) ملاءمة الصور الكبيرة حتى لا يتجاوز أي عنصر ارتفاع الورقة
+  _fitOversizedImages(container, USABLE);
+
+  // إجبار إعادة التخطيط بعد إزالة الدفعات
+  void container.offsetHeight;
+
+  // 3) المرور على الوحدات وحساب نقاط الكسر (بنفس منطق break-inside:avoid)
+  let cRect = container.getBoundingClientRect();
+  let contTop = cRect.top + window.scrollY;     // أعلى منطقة المحتوى = أعلى الورقة الأولى للمحتوى
+  let pageStart = 0;                            // إزاحة (نسبية للحاوية) لبداية منطقة الكتابة بالورقة الحالية
+  let firstOnPage = true;
+  let pageCount = 1;
+
+  for(let i=0;i<units.length;i++){
+    let u = units[i];
+    if(u.offsetParent === null) continue;       // عنصر مخفي
+    let r = u.getBoundingClientRect();
+    let top = (r.top + window.scrollY) - contTop;
+    let bottom = top + r.height;
+
+    // اكسر قبل هذه الوحدة إن تجاوزت أسفل منطقة الكتابة، وليست أول عنصر بالصفحة
+    if(!firstOnPage && (bottom - pageStart) > USABLE + 1){
+      // ادفع الوحدة لتبدأ من أعلى الورقة التالية
+      let push = (pageStart + USABLE - top) + (PAD_B + GAP + PAD_T);
+      u.classList.add('pg-break','pg-pushed');
+      u.style.setProperty('--push', push.toFixed(1) + 'px');
+      pageStart = pageStart + USABLE + PAD_B + GAP + PAD_T;   // = pageStart + PAGE_H + GAP (مساحة كتابة الورقة التالية)
+      pageCount++;
+      firstOnPage = true;
+      // أعد قراءة المواضع لأن الدفع أزاح ما بعده
+      void container.offsetHeight;
+      cRect = container.getBoundingClientRect();
+      contTop = cRect.top + window.scrollY;
+    }
+    firstOnPage = false;
+    // سجّل رقم الصفحة الكلي لكل قسم (للفهرس): الغلاف صفحة 1، فمحتوى الصفحة n ⇒ n+1
+    if(u.classList.contains('section-header')){
+      let sec = u.closest('.page-section');
+      if(sec) sec.dataset.docpage = (pageCount + 1);
+    }
+  }
+
+  // 4) ارسم ورقات A4 البيضاء خلف المحتوى
+  let coverH = cover ? cover.offsetHeight : PAGE_H;
+  let firstSheetTop = coverH + GAP;             // أول ورقة محتوى تبدأ بعد الغلاف بفراغ
+  for(let p=0;p<pageCount;p++){
+    let sheet = document.createElement('div');
+    sheet.className='a4-sheet';
+    sheet.style.top = (firstSheetTop + p*(PAGE_H + GAP)) + 'px';
+    let num = document.createElement('div');
+    num.className='a4-sheet-num';
+    num.textContent = 'صفحة ' + (p + 2);        // +2 لأن الغلاف هو صفحة 1
+    sheet.appendChild(num);
+    doc.insertBefore(sheet, doc.firstChild);     // خلف المحتوى
+  }
+
+  // 5) اضبط ارتفاع المستند ليحتوي كل الورقات
+  let stackBottom = firstSheetTop + pageCount*(PAGE_H + GAP);
+  doc.style.minHeight = stackBottom + 'px';
+
+  // أبلغ الفهرس بأن الأرقام تحدّثت
+  doc.dataset.pageCount = (pageCount + 1);
+
+  // استعد موضع التمرير لمنع القفز
+  if(scroller && Math.abs(scroller.scrollTop - savedScroll) > 1){ scroller.scrollTop = savedScroll; }
+}
+
+// اجمع الوحدات القابلة للكسر بالترتيب: رأس القسم + كل عنصر داخل محتواه
+function _collectUnits(container){
+  let units = [];
+  container.querySelectorAll('.page-section').forEach(sec=>{
+    if(sec.classList.contains('section-hidden')) return;
+    let hdr = sec.querySelector('.section-header');
+    if(hdr) units.push(hdr);
+    let content = sec.querySelector('.section-content');
+    if(content){
+      Array.from(content.children).forEach(ch=>{
+        if(ch.classList && (ch.classList.contains('elem-insert-bar') || ch.classList.contains('between-drop'))) return;
+        // ملف PDF مرفوع: عامل كل صفحة كوحدة مستقلة حتى تجلس كل صفحة على ورقتها (تفادي القص عند الفاصل)
+        // شريط اسم الملف (الرأس) لا يُحتسب كوحدة — فهو عنصر تحكم فقط ويُخفى عند التصدير
+        if(ch.classList && ch.classList.contains('pdf-pages-wrap')){
+          ch.querySelectorAll('.pdf-page-item').forEach(pi=>units.push(pi));
+        } else {
+          units.push(ch);
+        }
+      });
+    }
+  });
+  return units;
+}
+
+// تصغير أي صورة أطول من ارتفاع منطقة الكتابة (مع الحفاظ على التناسب)
+function _fitOversizedImages(container, usable){
+  let maxH = usable - 12;
+  container.querySelectorAll('.img-block-item').forEach(box=>{
+    let h = box.offsetHeight;
+    if(h > maxH){
+      let ratio = maxH / h;
+      let newW = Math.round(box.offsetWidth * ratio);
+      box.style.width = newW + 'px';
+      box.style.height = maxH + 'px';
+      let disp = box.querySelector('.img-tb-size');
+      let cap = box.querySelector('.img-block-caption');
+      let capH = cap ? cap.offsetHeight : 22;
+      if(disp) disp.textContent = newW + ' × ' + Math.round(maxH - capH);
+    }
+  });
+}
+
 function exportPDF(){
   toast('\u{1F5A8}\uFE0F جاري التحضير...');
+  paginate();   // تأكد أن نقاط الكسر (.pg-break) محدّثة قبل التصدير
   let printCover=document.getElementById('print-cover');
   let printContent=document.getElementById('print-content');
   let printArea=document.getElementById('print-area');
@@ -2221,7 +2448,6 @@ function exportPDF(){
   let srcSections=document.getElementById('sections-container');
 
   // استخرج dataURL من كل canvas في المصدر الاصلي قبل innerHTML
-  // لان innerHTML لا ينقل بيانات البيكسل بل ينشئ canvas فارغا (يظهر اسود)
   let originalCanvases=Array.from(srcSections.querySelectorAll('canvas.pdf-page-canvas'));
   let canvasDataURLs=originalCanvases.map(c=>c.toDataURL('image/jpeg',0.95));
 
@@ -2231,26 +2457,37 @@ function exportPDF(){
   clonedCanvases.forEach((canvas,i)=>{
     let img=document.createElement('img');
     img.src=canvasDataURLs[i];
-    img.style.cssText='width:100%;height:auto;display:block;';
+    img.style.cssText='display:block;width:auto;height:auto;max-width:100%;max-height:calc(297mm - 26mm);margin:0 auto;';
     canvas.parentNode.replaceChild(img,canvas);
   });
 
-  if(pdfCoverImage) printCover.innerHTML=`<img src="${pdfCoverImage}" style="width:210mm;height:297mm;object-fit:cover;display:block;">`;
-  else printCover.innerHTML=`<div class="page-cover-print" style="width:210mm; height:297mm; display:flex; align-items:center; justify-content:center; font-size:40px; font-weight:bold; background:linear-gradient(135deg, var(--primary), var(--accent)); color:white;">ملف الإنجاز</div>`;
+  // الغلاف يُعرض دائماً كصفحة أولى مستقلة بملء الورقة (لا داخل المحتوى) — يمنع قص الجوانب والصفحة الفارغة.
+  printCover.style.display='block';
+  if(pdfCoverImage){
+    printCover.innerHTML=`<img src="${pdfCoverImage}" style="width:210mm;height:297mm;object-fit:cover;display:block;">`;
+  } else {
+    // انسخ الغلاف الداخلي (التدرّج + الصورة + العناوين) واجعله يملأ الورقة مع الحفاظ على الخلفية
+    let cmp = getComputedStyle(srcCover);
+    let bgImage = (srcCover.style.background || srcCover.style.backgroundImage || cmp.backgroundImage || '');
+    let bgColor = cmp.backgroundColor || '';
+    let coverClone=srcCover.cloneNode(true);
+    coverClone.removeAttribute('id');
+    coverClone.querySelectorAll('.cover-upload-btn, input, label').forEach(el=>el.remove());
+    coverClone.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));
+    coverClone.style.cssText='width:210mm;height:297mm;margin:0;border-radius:0;box-shadow:none;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 40px;color:#fff;overflow:hidden;'
+      + 'background:'+(bgImage && bgImage!=='none' ? bgImage : 'linear-gradient(135deg,#1e3a8a 0%,#1e40af 60%,#0f766e 100%)')+';'
+      + (bgColor ? 'background-color:'+bgColor+';' : '');
+    printCover.innerHTML='';
+    printCover.appendChild(coverClone);
+  }
+  // المحتوى = الأقسام فقط (دون غلاف داخلي)
+  printContent.innerHTML=sectionsClone.innerHTML;
 
-  // استخدم النسخة المعدلة (img بدلا من canvas)
-  printContent.innerHTML=srcCover.outerHTML+sectionsClone.innerHTML;
-  // ✅ تأكد من بقاء anchor IDs في نسخة الطباعة
-  // (محفوظة تلقائياً لأننا نسخنا innerHTML كاملاً)
   printContent.querySelectorAll('.dynamic-spacer').forEach(sp=>{ let h=sp.getAttribute('data-height')||'40'; let div=document.createElement('div'); div.style.cssText='height:'+h+'px;width:100%;display:block;'; sp.parentNode.replaceChild(div,sp); });
-  printContent.querySelectorAll('button, .section-controls, .section-add-bar, .spacer-controls, .sec-add-btn, .card-remove, .info-item-remove, .link-item-remove, .img-block-remove, .single-field-remove, .between-drop, .drag-icon, .cover-upload-btn, input').forEach(el=>el.style.display='none');
+  printContent.querySelectorAll('button, .section-controls, .section-add-bar, .spacer-controls, .sec-add-btn, .card-remove, .info-item-remove, .link-item-remove, .img-block-remove, .single-field-remove, .between-drop, .drag-icon, .cover-upload-btn, .a4-sheet, .a4-sheet-num, .pdf-pages-header, .pdf-page-label, input').forEach(el=>el.style.display='none');
   printContent.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));
   printContent.querySelectorAll('.pdf-page-label').forEach(el=>el.style.display='none');
-  // أزل inline width من صور المعرض حتى تتدفق بشكل طبيعي في PDF
-  printContent.querySelectorAll('.img-block-item').forEach(el=>{
-    el.style.flexShrink='0';
-    // احتفظ بالعرض المحدد من المستخدم
-  });
+  printContent.querySelectorAll('.img-block-item').forEach(el=>{ el.style.flexShrink='0'; });
   // ✅ أضف CSS variables الحالية في print area
   let cs = getComputedStyle(document.documentElement);
   let cssVarsStyle = document.getElementById('print-css-vars');
@@ -2272,13 +2509,18 @@ function exportPDF(){
 function saveToFile(){
   // حوّل canvas صفحات PDF إلى img قبل الحفظ حتى تُحفظ الصور بالكامل
   let sectionsClone = document.getElementById('sections-container').cloneNode(true);
+  // أزل مخلّفات محرك الترقيم (تُعاد عند الاستعادة تلقائياً)
+  sectionsClone.querySelectorAll('.pg-break, .pg-pushed').forEach(el=>{
+    el.classList.remove('pg-break','pg-pushed');
+    el.style.removeProperty('--push');
+  });
   let origCanvases = Array.from(document.getElementById('sections-container').querySelectorAll('canvas.pdf-page-canvas'));
   let clonedCanvases = Array.from(sectionsClone.querySelectorAll('canvas.pdf-page-canvas'));
   origCanvases.forEach((c,i)=>{
     let img=document.createElement('img');
     img.src=c.toDataURL('image/png');
     img.className='pdf-page-canvas';
-    img.style.cssText='width:100%;height:auto;display:block;';
+    img.style.cssText='display:block;width:auto;height:auto;max-width:100%;max-height:calc(var(--page-h) - var(--page-pad-top) - var(--page-pad-bot) - 26px);margin:0 auto;';
     clonedCanvases[i].parentNode.replaceChild(img, clonedCanvases[i]);
   });
   // اسم الملف بتاريخ اليوم
@@ -2352,16 +2594,9 @@ function restoreFromFile(e){
 let tocSelectedPosition = null;
 
 function calcPageNum(el){
-  let page = document.getElementById('a4-page');
-  if(!page) return 1;
-  let pageTop = page.getBoundingClientRect().top + window.scrollY;
-  let elTop   = el.getBoundingClientRect().top  + window.scrollY;
-  let relativeY = elTop - pageTop;
-  let pageH  = 1123;
-  let coverEl = document.getElementById('page-cover');
-  let coverH = coverEl ? coverEl.offsetHeight : pageH;
-  if(relativeY < coverH) return 1;
-  return Math.max(2, Math.floor((relativeY - coverH) / pageH) + 2);
+  let sec = el.classList && el.classList.contains('page-section') ? el : (el.closest && el.closest('.page-section'));
+  if(sec && sec.dataset.docpage) return parseInt(sec.dataset.docpage) || 2;
+  return 2;
 }
 
 function getEntryIcon(title){
@@ -2373,6 +2608,7 @@ function getEntryIcon(title){
 }
 
 function collectTocData(){
+  paginate();   // حدّث أرقام الصفحات مرة واحدة
   let entries = [];
   document.querySelectorAll('.page-section').forEach(sec => {
     if(sec.dataset.type === 'toc') return;
@@ -2758,6 +2994,19 @@ window.addEventListener('DOMContentLoaded',()=>{
   updatePageBreakLines();
   initMobileOverlay();
   refreshInsertBars();
+  // تشغيل ترقيم إضافي بعد تحميل الخطوط والصور لضبط المواضع
+  setTimeout(updatePageBreakLines, 350);
+  window.addEventListener('load', ()=>setTimeout(updatePageBreakLines, 200));
+
+  // إعادة الترقيم أثناء الكتابة (مؤجّل)
+  let _typeTimer=null;
+  ['sections-container','page-cover'].forEach(id=>{
+    let host=document.getElementById(id);
+    if(host) host.addEventListener('input', ()=>{
+      clearTimeout(_typeTimer);
+      _typeTimer=setTimeout(updatePageBreakLines, 300);
+    });
+  });
 
   // MutationObserver: أعد بناء الأشرطة عند أي تغيير في الأقسام
   let _barTimer = null;
@@ -2772,7 +3021,10 @@ window.addEventListener('DOMContentLoaded',()=>{
 document.addEventListener('click',()=>{
   document.querySelectorAll('.img-block-item.selected').forEach(el=>el.classList.remove('selected'));
 });
-const resizeObs=new ResizeObserver(()=>updatePageBreakLines()); resizeObs.observe(document.getElementById('sections-container')); resizeObs.observe(document.getElementById('page-cover'));
+// أُزيل ResizeObserver لأنه كان يسبب حلقة إعادة تخطيط (قفز شريط التمرير).
+// إعادة الترقيم تتم الآن عبر محفّزات صريحة فقط (إضافة/حذف/كتابة/تحميل صورة/تغيير حجم النافذة).
+let _winResizeTimer=null;
+window.addEventListener('resize', ()=>{ clearTimeout(_winResizeTimer); _winResizeTimer=setTimeout(updatePageBreakLines, 200); });
 const mutationObs=new MutationObserver(()=>{ let hasContent=document.getElementById('sections-container').children.length>0; document.getElementById('drop-hint').classList.toggle('hidden',hasContent); updatePageBreakLines(); reinitAllSortables(); }); mutationObs.observe(document.getElementById('sections-container'),{childList:true,subtree:true});
 document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('active'); }));
 // ═══════════════════════════════════════════════
