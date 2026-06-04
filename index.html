@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>منصّة إنجاز · بناء ملف إنجاز المعلم</title>
+<title>إنشاء ملف الإنجاز للمعلم</title>
+<meta name="description" content="إنشاء ملف الإنجاز للمعلم — منصة احترافية لبناء ملف إنجاز المعلم وتصديره PDF.">
+<meta property="og:title" content="إنشاء ملف الإنجاز للمعلم">
+<meta property="og:description" content="منصة احترافية لبناء ملف إنجاز المعلم وتصديره PDF.">
+<meta property="og:type" content="website">
+<meta name="twitter:title" content="إنشاء ملف الإنجاز للمعلم">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&family=Almarai:wght@400;700;800&family=El+Messiri:wght@400;500;600;700&family=Changa:wght@400;500;600;700;800&family=Markazi+Text:wght@400;500;600;700&family=Reem+Kufi:wght@400;500;600;700&family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Lalezar&family=Mada:wght@400;500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -525,6 +530,15 @@ body.is-touch .logo-eye{opacity:1}
 .mobile-zoom span{min-width:46px;text-align:center;font-size:12.5px;font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums}
 @media(max-width:920px){.mobile-zoom{display:flex}}
 @media print{.mobile-zoom{display:none!important}}
+/* زر عائم لفتح قائمة الأقسام والعناصر على الجوال */
+.fab-menu{display:none;position:fixed;bottom:68px;left:50%;transform:translateX(-50%);z-index:92;align-items:center;gap:8px;padding:12px 20px;border-radius:30px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font-weight:800;font-size:13.5px;box-shadow:0 12px 30px -8px rgba(29,78,216,.6);font-family:'Cairo',sans-serif}
+.fab-menu svg{width:18px;height:18px;flex:none}
+.fab-menu:active{transform:translateX(-50%) scale(.96)}
+@media(max-width:920px){.fab-menu{display:flex}}
+body.sidebar-open .fab-menu{display:none!important}
+body.sidebar-open .mobile-zoom{display:none!important}
+@media print{.fab-menu{display:none!important}}
+@media print{.mobile-zoom{display:none!important}}
 
 /* ===== طباعة / PDF — تطابق كامل (WYSIWYG) ===== */
 /* ===== تبويبات الشريط الجانبي ===== */
@@ -601,21 +615,23 @@ body.is-touch .logo-eye{opacity:1}
 .cover-menu .cm-status.has{color:var(--accent);font-weight:600}
 
 /* ===== شاشة الترحيب للجوال (تصميم أزرق فاتح حديث) ===== */
-#mobile-overlay{display:none;position:fixed;inset:0;z-index:500;background:linear-gradient(165deg,#eef6ff 0%,#d9ecff 50%,#c3e0fb 100%);color:#10314f;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px;overflow-y:auto}
+#mobile-overlay{display:none;position:fixed;inset:0;z-index:500;background:linear-gradient(165deg,#eef6ff 0%,#d9ecff 50%,#c3e0fb 100%);color:#10314f;overflow-y:auto;-webkit-overflow-scrolling:touch}
 #mobile-overlay.show{display:flex}
-.mob-logo{width:80px;height:80px;border-radius:22px;display:grid;place-items:center;font-size:42px;margin-bottom:16px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);box-shadow:0 14px 34px -10px rgba(37,99,235,.6)}
-.mob-title{font-size:21px;font-weight:800;margin-bottom:18px;line-height:1.5;color:#0f2a47}
-.mob-device{background:#fff;border:1px solid #cfe2fb;border-radius:18px;padding:18px 20px;max-width:360px;margin-bottom:20px;box-shadow:0 16px 40px -18px rgba(29,78,216,.4)}
-.mob-device .mob-dev-icon{font-size:34px;margin-bottom:8px}
-.mob-device .mob-dev-title{font-weight:800;font-size:16px;margin-bottom:8px;color:#1d4ed8}
-.mob-device .mob-dev-text{font-size:13.5px;color:#3f5b78;line-height:1.7}
-.mob-device .mob-dev-badge{display:inline-block;margin-top:12px;padding:5px 16px;border-radius:20px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font-size:12px;font-weight:700}
-.mob-features{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;max-width:380px;margin-bottom:24px}
-.mob-feature{background:rgba(255,255,255,.75);border:1px solid #d3e4fb;border-radius:12px;padding:11px 8px;font-size:11.5px;font-weight:600;color:#1e3a5f;display:flex;align-items:center;gap:6px;justify-content:center;text-align:center}
-.mob-continue-btn{padding:15px 40px;border-radius:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font-weight:800;font-size:16px;margin-bottom:22px;box-shadow:0 12px 30px -8px rgba(29,78,216,.6);transition:.16s}
+.mob-inner{margin:auto;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 22px;box-sizing:border-box}
+.mob-logo{width:74px;height:74px;border-radius:20px;display:grid;place-items:center;font-size:38px;margin-bottom:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);box-shadow:0 14px 34px -10px rgba(37,99,235,.6);flex:none}
+.mob-title{font-size:20px;font-weight:800;margin-bottom:16px;line-height:1.5;color:#0f2a47}
+.mob-device{background:#fff;border:1px solid #cfe2fb;border-radius:18px;padding:16px 18px;width:100%;margin-bottom:18px;box-shadow:0 16px 40px -18px rgba(29,78,216,.4)}
+.mob-device .mob-dev-icon{font-size:32px;margin-bottom:7px}
+.mob-device .mob-dev-title{font-weight:800;font-size:15.5px;margin-bottom:7px;color:#1d4ed8}
+.mob-device .mob-dev-text{font-size:13px;color:#3f5b78;line-height:1.7}
+.mob-device .mob-dev-badge{display:inline-block;margin-top:11px;padding:5px 16px;border-radius:20px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font-size:12px;font-weight:700}
+.mob-features{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;margin-bottom:20px}
+.mob-feature{background:rgba(255,255,255,.75);border:1px solid #d3e4fb;border-radius:12px;padding:10px 6px;font-size:11px;font-weight:600;color:#1e3a5f;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:center;text-align:center}
+.mob-continue-btn{padding:15px 40px;border-radius:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font-weight:800;font-size:16px;margin-bottom:18px;box-shadow:0 12px 30px -8px rgba(29,78,216,.6);transition:.16s;width:100%;max-width:300px}
 .mob-continue-btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px -8px rgba(29,78,216,.7)}
 .mob-credit{font-size:12px;color:#46627f;line-height:1.9}
-@media(max-width:560px){.mob-features{grid-template-columns:1fr 1fr}.mob-title{font-size:18px}}
+@media(max-width:380px){.mob-features{grid-template-columns:1fr 1fr}.mob-title{font-size:18px}.mob-logo{width:64px;height:64px;font-size:32px}}
+@media(max-height:680px){.mob-inner{padding:18px 22px}.mob-logo{width:58px;height:58px;font-size:30px;margin-bottom:10px}.mob-title{font-size:18px;margin-bottom:12px}.mob-device{padding:13px 16px;margin-bottom:13px}.mob-features{margin-bottom:14px}.mob-continue-btn{padding:13px 36px;margin-bottom:13px}}
 
 /* صفحة غلاف PDF المستقلة (للطباعة فقط) */
 .pdf-cover-page{display:none;padding:0!important;overflow:hidden}
@@ -648,19 +664,21 @@ body.is-touch .logo-eye{opacity:1}
 </head>
 <body class="hide-guides">
 <div id="mobile-overlay">
-  <div class="mob-logo">📘</div>
-  <div class="mob-title">منصة إنشاء ملف إنجاز المعلم</div>
-  <div class="mob-device" id="mobDevice"></div>
-  <div class="mob-features" id="mobFeatures">
-    <div class="mob-feature">🖨️ تصدير PDF</div>
-    <div class="mob-feature">🖼️ معرض صور</div>
-    <div class="mob-feature">📄 رفع PDF</div>
-    <div class="mob-feature">🎨 ثيمات جاهزة</div>
-    <div class="mob-feature">↕️ ترتيب الأقسام</div>
-    <div class="mob-feature">💾 حفظ الملف</div>
+  <div class="mob-inner">
+    <div class="mob-logo">📘</div>
+    <div class="mob-title">منصة إنشاء ملف إنجاز المعلم</div>
+    <div class="mob-device" id="mobDevice"></div>
+    <div class="mob-features" id="mobFeatures">
+      <div class="mob-feature">🖨️ تصدير PDF</div>
+      <div class="mob-feature">🖼️ معرض صور</div>
+      <div class="mob-feature">📄 رفع PDF</div>
+      <div class="mob-feature">🎨 ثيمات جاهزة</div>
+      <div class="mob-feature">↕️ ترتيب الأقسام</div>
+      <div class="mob-feature">💾 حفظ الملف</div>
+    </div>
+    <button class="mob-continue-btn" onclick="enterApp()">ابدأ الآن ←</button>
+    <div class="mob-credit">الأستاذ إياد خضر<br>مدرسة ابن تيمية الثانوية الشاملة للبنين<br>📞 0776507960</div>
   </div>
-  <button class="mob-continue-btn" onclick="enterApp()">ابدأ الآن ←</button>
-  <div class="mob-credit">الأستاذ إياد خضر<br>مدرسة ابن تيمية الثانوية الشاملة للبنين<br>📞 0776507960</div>
 </div>
 <div class="app">
   <header class="topbar">
@@ -867,6 +885,12 @@ body.is-touch .logo-eye{opacity:1}
   <button onclick="zoom(10)" aria-label="تكبير">+</button>
   <button class="mz-fit" onclick="fitMobileZoom()" title="ملاءمة العرض" aria-label="ملاءمة">⤢</button>
 </div>
+
+<!-- زر عائم لفتح قائمة الأقسام والعناصر على الجوال -->
+<button class="fab-menu" id="fabMenu" onclick="openSidebar()" aria-label="فتح قائمة الأقسام والعناصر">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+  <span>الأقسام والعناصر</span>
+</button>
 
 
 <!-- نافذة التصميم -->
