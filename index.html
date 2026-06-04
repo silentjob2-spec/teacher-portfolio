@@ -906,7 +906,7 @@ body.sidebar-open .mobile-zoom{display:none!important}
           <div class="cv-card-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M9 5v14M7 19h4"/></svg> محتوى الغلاف</div>
           <div class="cv-card-b">
             <div class="fld"><label>عنوان ملف الإنجاز</label><input type="text" id="cvTitle" oninput="updateCoverPreview()"></div>
-            <div class="fld"><label>اسم المعلم</label><input type="text" id="cvName" oninput="updateCoverPreview()"></div>
+            <div class="fld"><label>اسم المعلم</label><input type="text" id="cvName" placeholder="ادخل الاسم" oninput="updateCoverPreview()"></div>
             <div class="fld"><label>العنوان / العبارة الرسمية</label><input type="text" id="cvSub" placeholder="اكتب العنوان" oninput="updateCoverPreview()"></div>
             <div class="fld" style="margin-bottom:0"><label>السنة الدراسية</label><input type="text" id="cvYear" oninput="updateCoverPreview()"></div>
           </div>
@@ -988,7 +988,7 @@ if(PDF_OK){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/
 const A4_H=1123, PAGE_LIMIT=1112;
 
 let state={
-  cover:{title:"📘 ملف إنجاز المعلم",name:"الأستاذ إياد خضر",sub:"اكتب العنوان",year:"العام الدراسي 2025 / 2026",photo:"",bg:"",logo:"",showBg:true,showLogo:true,pdfCover:""},
+  cover:{title:"📘 ملف إنجاز المعلم",name:"ادخل الاسم",sub:"اكتب العنوان",year:"العام الدراسي 2025 / 2026",photo:"",bg:"",logo:"",showBg:true,showLogo:true,pdfCover:""},
   theme:{name:"blue",primary:"#1e3a8a",heading:"#1e3a8a",card:"#eef4ff",pageBg:"#ffffff",canvasBg:"#e8edf5",textMain:"#1e293b",hdrFrom:"#e0e7ff",hdrTo:"#e2e8f0",border:"#1e3a8a",coverC1:"#1e3a8a",coverC2:"#0f766e",scale:1,margin:0,bodyFont:"'Cairo',Tahoma,sans-serif",headingFont:"'Cairo',Tahoma,sans-serif",lineHeight:1.85,pagePad:56,headerStyle:'default',accentBar:true,pageGuide:false},
   sections:[]
 };
@@ -1747,7 +1747,7 @@ function switchTab(name){
 }
 function confirmReset(){openModal('resetModal');}
 function doReset(){
-  state={cover:{title:"📘 ملف إنجاز المعلم",name:"الأستاذ إياد خضر",sub:"اكتب العنوان",year:"العام الدراسي 2025 / 2026",photo:"",bg:"",logo:"",showBg:true,showLogo:true,pdfCover:""},theme:{...THEMES.blue,name:'blue',scale:1,margin:0,bodyFont:"'Cairo',Tahoma,sans-serif",headingFont:"'Cairo',Tahoma,sans-serif",lineHeight:1.85,pagePad:56,headerStyle:'default',accentBar:true,pageGuide:false},sections:[]};
+  state={cover:{title:"📘 ملف إنجاز المعلم",name:"ادخل الاسم",sub:"اكتب العنوان",year:"العام الدراسي 2025 / 2026",photo:"",bg:"",logo:"",showBg:true,showLogo:true,pdfCover:""},theme:{...THEMES.blue,name:'blue',scale:1,margin:0,bodyFont:"'Cairo',Tahoma,sans-serif",headingFont:"'Cairo',Tahoma,sans-serif",lineHeight:1.85,pagePad:56,headerStyle:'default',accentBar:true,pageGuide:false},sections:[]};
   selectedSectionId=null;
   applyTheme();buildThemeCards();buildPaletteGrid();buildFontSelects();syncDesignInputs();render();
   closeModal('resetModal');toast('تم مسح الكل والعودة للحالة الافتراضية');
